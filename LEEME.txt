@@ -1,40 +1,52 @@
 ========================================================================
-SUITE BIOMECÁNICA: EJERCICIOS CON GOMAS ELÁSTICAS
+ATLAS ANATÓMICO: 24 EJERCICIOS CON GOMAS ELÁSTICAS (DIBUJOS TÉCNICOS)
 Directorio: D:\Vídeo con gomas\
+Repositorio Web: https://elenabenitocases.github.io/Ejercicios-gomas/
 ========================================================================
 
-¡Hola! En esta carpeta se encuentran alojadas las animaciones técnicas y
-el generador de vídeos para el fortalecimiento muscular con bandas elásticas.
+¡Hola! Esta guía ha sido transformada para basarse exclusivamente en
+DIBUJOS TÉCNICOS ILUSTRATIVOS en dos fases (Inicio y Contracción),
+detallando paso a paso:
+1. Dónde y cómo colocar la goma elástica (anclaje, por dónde pasa la goma).
+2. Mecánica articular clara (si se flexiona o se extiende la rodilla/codo).
+3. Músculos activados (Agonistas principales, sinergistas y estabilizadores).
+4. Errores frecuentes a evitar.
 
-CONTENIDO DE ESTA CARPETA:
+ÍNDICE DE LOS 24 EJERCICIOS INCLUIDOS:
 ------------------------------------------------------------------------
-1. index.html:
-   La aplicación principal con el reproductor interactivo de 6 ejercicios.
-   Permite ver la técnica en 60 FPS, analizar los ángulos articulares, la
-   activación muscular en tiempo real (mapa de calor) y la tensión elástica.
+PIERNAS, CUÁDRICEPS Y GLÚTEOS:
+01. Extensión de Rodilla Terminal con Goma (TKE) - Cuádriceps Aislado
+02. Sentadilla Frontal con Goma Pisada (Front Squat) - Cuádriceps + Glúteos
+03. Sentadilla Isométrica en Pared (Wall Sit) con Miniband - Cuádriceps + Glúteo Medio
+04. Zancadas / Lunges con Goma Pisada - Cuádriceps Unilateral + Glúteos
+05. Curl Femoral con Goma (Prono / Suelo) - Aislamiento Isquiotibiales
+06. Pasos Laterales con Miniband (Monster Walk) - Glúteo Medio y Abductores
+07. Puente de Glúteo / Hip Thrust con Banda - Glúteo Mayor y Cadena Posterior
+08. Peso Muerto Rumano con Banda (RDL) - Isquiotibiales y Glúteos
+24. Elevación de Talones con Banda (Calf Raise) - Gemelos y Sóleo
 
-2. Abrir_Videos.bat:
-   Acceso directo ejecutable. Al hacer doble clic sobre él, se abrirá la
-   suite inmediatamente en tu navegador web habitual (Edge, Chrome, etc.).
+ESPALDA Y TRACCIÓN:
+09. Remo Horizontal con Goma (Sentado o de Pie) - Dorsal Ancho y Romboides
+10. Jalón al Pecho con Goma (Lat Pulldown) - Dorsal Ancho (Tracción Vertical)
+11. Band Pull-Apart (Separaciones Horizontales) - Deltoides Posterior y Romboides
+12. Face Pull con Banda - Deltoides Posterior y Manguito Rotador
 
-3. Botón "Descargar Vídeo (.webm)":
-   Dentro de la aplicación, al pulsar este botón en cualquiera de los
-   ejercicios, se grabará automáticamente una repetición completa a 60 FPS
-   en bucle y se descargará directamente como archivo de vídeo a tu equipo.
+PECHO Y EMPUJES:
+13. Flexiones Resistidas con Goma (Push-ups) - Pectoral Mayor y Tríceps
+14. Aperturas / Cruce de Pecho con Banda - Pectoral Mayor Aislado
+15. Press de Pecho de Pie con Banda - Pectoral Mayor y Tríceps
 
-EJERCICIOS INCLUIDOS:
-------------------------------------------------------------------------
-1. Isquiotibiales: Curl Femoral Prono con Goma (Aislamiento flexión de rodilla)
-2. Glúteos y Abductores: Pasos Laterales con Miniband (Monster Walk)
-3. Espalda y Dorsales: Remo Horizontal con Goma
-4. Hombros y Deltoides: Elevaciones Laterales con Banda Elástica
-5. Cuádriceps: Sentadilla con Banda Elástica (Squat con tensión ascendente)
-6. Pectoral: Cruce / Aperturas de Pecho con Goma (Compresión en pico)
+HOMBROS Y DELTOIDES:
+16. Press Militar / Overhead Press con Banda - Deltoides Anterior y Tríceps
+17. Elevaciones Laterales con Goma - Deltoides Lateral Aislado
+18. Remo al Mentón con Banda (Upright Row) - Trapecio Superior y Hombros
 
-CÓDIGO DE COLORES TÉCNICO:
-------------------------------------------------------------------------
-- ROJO INCANDESCENTE (#ef4444): Músculo agonista principal en máxima contracción.
-- ÁMBAR (#f59e0b): Músculos sinergistas y fijadores.
-- AZUL CIAN (#06b6d4): Banda elástica y vectores de fuerza de resistencia.
-- VERDE (#10b981): Estabilidad lumbar y alineación postural protegida.
+BRAZOS (BÍCEPS Y TRÍCEPS):
+19. Curl de Bíceps con Banda Elástica - Bíceps Braquial
+20. Tríceps Pushdown con Banda en Polea Alta - Tríceps Braquial
+21. Extensión de Tríceps sobre la Cabeza (Overhead) - Cabeza Larga del Tríceps
+
+CORE Y MULTIARTICULARES GLOBALES:
+22. Press Pallof con Goma - Core Anti-rotación y Oblicuos
+23. Thruster con Goma (Sentadilla + Press) - Multiarticular Total de Cuerpo Completo
 ========================================================================
