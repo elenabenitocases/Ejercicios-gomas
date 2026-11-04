@@ -1,42 +1,32 @@
 ========================================================================
-ATLAS ANATÓMICO Y BIOMECÁNICO: 24 EJERCICIOS + 11 MÓDULOS DE BIOMECÁNICA
+ATLAS BIOMECÁNICO: 24 EJERCICIOS (VÍDEO 60 FPS + PDF) + 11 MÓDULOS DE BIOMECÁNICA
 Directorio local: D:\Vídeo con gomas\
 Repositorio GitHub: https://github.com/elenabenitocases/Ejercicios-gomas
 Sitio Web en vivo:  https://elenabenitocases.github.io/Ejercicios-gomas/
+Portal Recursos:    https://elenabenitocases.github.io/Recursos-Educativos/
 ========================================================================
 
-Esta aplicación web combina dos grandes secciones de estudio e instrucción:
+Esta suite interactiva ofrece una experiencia dual completa en cada ejercicio:
 
-SECCIÓN 1: 24 EJERCICIOS ILUSTRADOS CON GOMAS ELÁSTICAS
-Cada ficha contiene:
-1. Dónde y cómo colocar la goma elástica (anclaje, posición y sujeción).
-2. Mecánica articular (flexión vs extensión en dos fases ilustradas con SVG).
-3. Músculos activados (Agonistas principales, sinergistas y estabilizadores).
-4. Errores frecuentes a evitar y aclaración detallada de cuádriceps (#01 y #02).
+1. REPRODUCTOR DE VÍDEO VECTORIAL A 60 FPS
+- Alternancia de atleta: Mujer 👩 y Hombre 👨.
+- Mapa de calor muscular incandescente (rojo en agonista activo, ámbar en sinergistas).
+- Vectores de tensión elástica cyan y eje de alineación postural verde esmeralda.
+- HUD en vivo con ángulo articular, fase del movimiento y porcentaje de activación.
+- Grabador de vídeo WebM a 60 FPS directo al ordenador (sin subir archivos pesados).
 
-SECCIÓN 2: 11 MÓDULOS DE BIOMECÁNICA, OSTEOPATÍA Y CONTROL MOTOR
-Bloque I: Mecánica Articular y Movimiento (Las bases de la biomecánica)
-- Módulo 01: Anteversión y retroversión pélvica (curvas lumbares, butt wink en sentadilla y peso muerto)
-- Módulo 02: Supinación y pronación (pie/arco plantar -> rotación tibial -> rodilla; antebrazo radio-cúbito)
-- Módulo 03: Abducción y aducción (estabilidad pélvica, glúteo medio, signo de Trendelenburg)
-- Módulo 04: Rotación interna y externa (espacio subacromial en hombro y prevención del manguito; cadera)
-- Módulo 05: Dorsiflexión y flexión plantar de tobillo (astrágalo, compensación lumbar en sentadilla)
-- Módulo 06: Disociación lumbo-pélvica (bisagra de cadera pura con columna neutra vs flexión lumbar en 'C')
+2. LÁMINA TÉCNICA ANATÓMICA SVG CON MODAL DE ZOOM
+- Dibujo vectorial técnico de dos fases (Fase 1: Inicio y Anclaje / Fase 2: Ejecución).
 
-Bloque II: Conceptos Estructurales y Osteopáticos (El cuerpo como un todo)
-- Módulo 07: Fascia y cadenas lesionales ascendentes (esguince de tobillo mal curado -> torsión pélvica -> cervicalgia)
-- Módulo 08: Respiración diafragmática y bracing intraabdominal (diafragma en L1-L3, cilindro hidráulico 360°)
-- Módulo 09: Descompresión articular vs Compresión (Ley de Wolff para hueso vs nutrición discal por imbibición)
+3. FICHA TÉCNICA COMPLETA IMPRIMIBLE EN PDF
+- Botón individual en cada ejercicio para generar una ficha PDF de 1-2 páginas.
+- Botón maestro superior para imprimir el atlas completo.
 
-Bloque III: Control Motor y Prevención (Conexión cerebro-músculo)
-- Módulo 10: Propiocepción y mecanorreceptores (husos neuromusculares, OTG, ceguera sensorial y prevención de recidivas)
-- Módulo 11: Activación vs Tensión muscular (el mito del músculo tenso/duro: espasmo protector vs fuerza real)
+4. 11 MÓDULOS DE BIOMECÁNICA, OSTEOPATÍA Y CONTROL MOTOR
+- Biomecánica articular (anteversión/retroversión, supinación/pronación, abducción/aducción, etc.).
+- Biotensegridad y osteopatía (fascia, cadenas lesionales, respiración y bracing 360°).
+- Control motor (propiocepción y mitos de tensión muscular).
 
-========================================================================
-CARACTERÍSTICAS TÉCNICAS:
-- 100% SVG nativo (sin vídeos, sin simuladores que marean, solo dibujos técnicos nítidos).
-- Selector maestro para alternar entre Ejercicios con Gomas y Módulos Biomecánicos.
-- Modal de zoom para ampliar cualquier diagrama en pantalla completa.
-- Filtros por categoría y buscador instantáneo.
-- Formato optimizado para impresión (Ctrl + P) para fichas clínicas y deportivas.
-========================================================================
+CÓMO ABRIR:
+- Haz doble clic en "Abrir_Videos.bat" para iniciar la suite en tu navegador.
+- Funciona 100% offline sin necesidad de conexión ni instalaciones previas.

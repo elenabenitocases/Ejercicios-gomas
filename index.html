@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -481,6 +481,722 @@
       }
       .svg-container { cursor: default; }
     }
+    /* ========================================================
+       ESTUDIO BIOMECÃNICO INTERACTIVO MASTER (60 FPS)
+       ======================================================== */
+    .master-studio-section {
+      background: linear-gradient(145deg, #0b1120 0%, #020617 100%);
+      border: 1px solid #1e293b;
+      border-radius: 16px;
+      padding: 22px;
+      margin-bottom: 28px;
+      box-shadow: 0 20px 30px -10px rgba(0,0,0,0.5);
+      color: #f8fafc;
+    }
+    .studio-header {
+      margin-bottom: 18px;
+    }
+    .studio-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(14, 165, 233, 0.15);
+      border: 1px solid rgba(14, 165, 233, 0.4);
+      color: #38bdf8;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      margin-bottom: 8px;
+      font-family: ui-monospace, monospace;
+    }
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #06b6d4;
+      box-shadow: 0 0 10px #06b6d4;
+      animation: pulse-dot 1.5s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 0.8; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.3); }
+    }
+    .studio-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+    .studio-desc {
+      font-size: 13.5px;
+      color: #94a3b8;
+      max-width: 980px;
+      line-height: 1.5;
+    }
+
+    .studio-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    @media (min-width: 1024px) {
+      .studio-layout {
+        grid-template-columns: 7.5fr 4.5fr;
+      }
+    }
+
+    /* Monitor de VÃ­deo 16:9 */
+    .studio-monitor-wrap {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+    }
+    .monitor-screen {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #020617;
+      background-size: 20px 20px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-bottom: 1px solid #1e293b;
+    }
+    .studio-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+    }
+
+    /* HUD Overlays del Monitor */
+    .hud-top-left, .hud-top-right, .hud-bottom-left {
+      position: absolute;
+      pointer-events: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 11px;
+      z-index: 5;
+    }
+    .hud-top-left {
+      top: 12px;
+      left: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .hud-top-right {
+      top: 12px;
+      right: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+    .hud-bottom-left {
+      bottom: 12px;
+      left: 12px;
+      width: 210px;
+    }
+    .hud-pill {
+      background: rgba(2, 6, 23, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(51, 65, 85, 0.8);
+      color: #e2e8f0;
+      padding: 5px 10px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+    }
+    .hud-pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ef4444;
+      animation: pulse-dot 1.2s infinite;
+    }
+    .hud-meter-box {
+      background: rgba(2, 6, 23, 0.88);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(51, 65, 85, 0.8);
+      padding: 8px 12px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .hud-meter-header {
+      display: flex;
+      justify-content: space-between;
+      color: #94a3b8;
+      font-size: 10.5px;
+    }
+    .hud-meter-header strong {
+      color: #ef4444;
+    }
+    .hud-meter-track {
+      width: 100%;
+      height: 6px;
+      background: #1e293b;
+      border-radius: 9999px;
+      overflow: hidden;
+      border: 1px solid #334155;
+    }
+    .hud-meter-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #f59e0b, #ef4444);
+      width: 30%;
+      transition: width 0.08s ease-out;
+    }
+    .studio-recording-badge {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #dc2626;
+      color: #ffffff;
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      box-shadow: 0 4px 15px rgba(220, 38, 38, 0.6);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: pulse-dot 1s infinite;
+      z-index: 10;
+    }
+    .rec-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #ffffff;
+    }
+
+    /* Barra de Controles del Monitor */
+    .studio-controls-bar {
+      background: #0f172a;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .studio-timeline-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .studio-scrubber {
+      width: 100%;
+      height: 5px;
+      border-radius: 4px;
+      background: #334155;
+      accent-color: #0284c7;
+      cursor: pointer;
+    }
+    .studio-actions-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .studio-playback-group, .studio-athlete-group, .studio-download-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-studio-play {
+      background: #0284c7;
+      color: #ffffff;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-studio-play:hover {
+      background: #0369a1;
+    }
+    .btn-studio-icon {
+      background: #1e293b;
+      color: #cbd5e1;
+      border: 1px solid #334155;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-studio-icon:hover {
+      background: #334155;
+      color: #ffffff;
+    }
+    .studio-speed-group {
+      display: flex;
+      background: #1e293b;
+      padding: 2px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+    }
+    .speed-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .speed-btn.active {
+      background: #0284c7;
+      color: #ffffff;
+    }
+    .studio-athlete-group .group-label {
+      font-size: 11.5px;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+    .gender-btn-female, .gender-btn-male {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #94a3b8;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .gender-btn-female.active {
+      background: rgba(225, 29, 72, 0.25);
+      border-color: #f43f5e;
+      color: #fda4af;
+      box-shadow: 0 0 10px rgba(244, 63, 94, 0.3);
+    }
+    .gender-btn-male.active {
+      background: rgba(37, 99, 235, 0.25);
+      border-color: #3b82f6;
+      color: #93c5fd;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+    }
+    .btn-studio-download {
+      background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+      color: #ffffff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(225, 29, 72, 0.35);
+    }
+    .btn-studio-download:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    /* Panel de selecciÃ³n rÃ¡pida de 24 ejercicios */
+    .studio-selector-panel {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 480px;
+    }
+    .panel-heading {
+      font-size: 13px;
+      font-weight: 800;
+      color: #38bdf8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .ex-pills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 6px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .master-ex-pill {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #94a3b8;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 7px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: all 0.2s;
+    }
+    .master-ex-pill:hover {
+      background: #334155;
+      color: #ffffff;
+    }
+    .master-ex-pill.active {
+      background: #0284c7;
+      border-color: #38bdf8;
+      color: #ffffff;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);
+    }
+
+    /* ========================================================
+       BARRA MULTIMEDIA DUAL EN CADA UNA DE LAS 24 TARJETAS
+       ======================================================== */
+    .card-media-box {
+      border-bottom: 1px solid var(--border);
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-media-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: #f1f5f9;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .media-tabs {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .media-tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: #64748b;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .media-tab-btn:hover {
+      color: #0f172a;
+      background: #e2e8f0;
+    }
+    .media-tab-btn.active {
+      background: #ffffff;
+      color: #0284c7;
+      border-color: #cbd5e1;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .media-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .card-gender-group {
+      display: flex;
+      background: #e2e8f0;
+      padding: 2px;
+      border-radius: 6px;
+    }
+    .card-gender-btn {
+      background: transparent;
+      border: none;
+      color: #64748b;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .card-gender-btn.active {
+      background: #ffffff;
+      color: #0f172a;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    }
+    .card-btn-action {
+      border: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+    .card-btn-pdf {
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+    }
+    .card-btn-pdf:hover {
+      background: #bae6fd;
+    }
+    .card-btn-download {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+    .card-btn-download:hover {
+      background: #fecaca;
+    }
+
+    /* Video player en cada tarjeta */
+    .card-video-wrap {
+      display: block;
+      background: #020617;
+      position: relative;
+    }
+    .card-canvas-monitor {
+      position: relative;
+      width: 100%;
+      height: 250px;
+      background: #020617;
+      background-size: 18px 18px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .card-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+    }
+    .card-hud-tl, .card-hud-tr, .card-hud-bl {
+      position: absolute;
+      pointer-events: none;
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      z-index: 4;
+    }
+    .card-hud-tl {
+      top: 8px;
+      left: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .card-hud-tr {
+      top: 8px;
+      right: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+    .card-hud-bl {
+      bottom: 8px;
+      left: 8px;
+      width: 160px;
+    }
+    .card-hud-badge {
+      background: rgba(2, 6, 23, 0.82);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(51, 65, 85, 0.7);
+      color: #e2e8f0;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 600;
+    }
+    .hud-dot-pulse {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #ef4444;
+      animation: pulse-dot 1.2s infinite;
+    }
+    .card-meter-box {
+      background: rgba(2, 6, 23, 0.85);
+      border: 1px solid rgba(51, 65, 85, 0.7);
+      padding: 5px 8px;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .card-meter-header {
+      display: flex;
+      justify-content: space-between;
+      color: #94a3b8;
+      font-size: 9.5px;
+    }
+    .card-meter-header strong {
+      color: #ef4444;
+    }
+    .card-meter-track {
+      width: 100%;
+      height: 4px;
+      background: #1e293b;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+    .card-meter-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #f59e0b, #ef4444);
+      width: 25%;
+    }
+    .card-rec-badge {
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #dc2626;
+      color: #ffffff;
+      font-family: ui-monospace, monospace;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      z-index: 10;
+    }
+    .card-video-controls {
+      background: #0f172a;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-top: 1px solid #1e293b;
+    }
+    .card-play-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #ffffff;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .card-scrubber {
+      flex: 1;
+      height: 4px;
+      background: #334155;
+      accent-color: #0284c7;
+      cursor: pointer;
+    }
+    .card-speed-mini {
+      display: flex;
+      gap: 2px;
+    }
+    .card-speed-mini button {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 5px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .card-speed-mini button.active {
+      background: #0284c7;
+      color: #ffffff;
+    }
+
+    /* ========================================================
+       IMPRESIÃ“N EN PDF: FICHA AISLADA O ATLAS COMPLETO
+       ======================================================== */
+    @media print {
+      body[data-print-focus] header,
+      body[data-print-focus] .master-studio-section,
+      body[data-print-focus] .sticky-nav,
+      body[data-print-focus] .clarification-banner,
+      body[data-print-focus] .card-media-toolbar,
+      body[data-print-focus] .card-video-controls,
+      body[data-print-focus] .card-hud-tl,
+      body[data-print-focus] .card-hud-tr,
+      body[data-print-focus] .card-hud-bl,
+      body[data-print-focus] .card-rec-badge,
+      body[data-print-focus] #bioGrid,
+      body[data-print-focus] footer {
+        display: none !important;
+      }
+      body[data-print-focus] .exercise-card,
+      body[data-print-focus] .ex-card {
+        display: none !important;
+      }
+      body[data-print-focus="1"] #ejercicio-1,
+      body[data-print-focus="2"] #ejercicio-2,
+      body[data-print-focus="3"] #ejercicio-3,
+      body[data-print-focus="4"] #ejercicio-4,
+      body[data-print-focus="5"] #ejercicio-5,
+      body[data-print-focus="6"] #ejercicio-6,
+      body[data-print-focus="7"] #ejercicio-7,
+      body[data-print-focus="8"] #ejercicio-8,
+      body[data-print-focus="9"] #ejercicio-9,
+      body[data-print-focus="10"] #ejercicio-10,
+      body[data-print-focus="11"] #ejercicio-11,
+      body[data-print-focus="12"] #ejercicio-12,
+      body[data-print-focus="13"] #ejercicio-13,
+      body[data-print-focus="14"] #ejercicio-14,
+      body[data-print-focus="15"] #ejercicio-15,
+      body[data-print-focus="16"] #ejercicio-16,
+      body[data-print-focus="17"] #ejercicio-17,
+      body[data-print-focus="18"] #ejercicio-18,
+      body[data-print-focus="19"] #ejercicio-19,
+      body[data-print-focus="20"] #ejercicio-20,
+      body[data-print-focus="21"] #ejercicio-21,
+      body[data-print-focus="22"] #ejercicio-22,
+      body[data-print-focus="23"] #ejercicio-23,
+      body[data-print-focus="24"] #ejercicio-24 {
+        display: flex !important;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+        border: 1px solid #cbd5e1;
+        box-shadow: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .card-video-wrap { display: block !important; }
+      .svg-container { display: block !important; }
+      .card-media-toolbar { display: none !important; }
+    }
   </style>
 </head>
 <body>
@@ -552,6 +1268,134 @@
     <!-- SECCIÓN 1: 24 EJERCICIOS CON GOMAS         -->
     <!-- ========================================== -->
     <div class="section-block active" id="sectionExercises">
+          <!-- ========================================== -->
+    <!-- ESTUDIO BIOMECÃNICO INTERACTIVO (60 FPS)   -->
+    <!-- ========================================== -->
+    <section id="master-video-studio" class="master-studio-section">
+      <div class="studio-header">
+        <div class="studio-badge">
+          <span class="live-dot"></span>
+          ESTUDIO BIOMECÃNICO INTERACTIVO // RENDERIZADO VECTORIAL 60 FPS
+        </div>
+        <h2 id="master-video-title" class="studio-title">#01. ExtensiÃ³n de Rodilla Terminal (TKE)</h2>
+        <p class="studio-desc">
+          VisualizaciÃ³n dinÃ¡mica del movimiento en tiempo real con modelado anatÃ³mico humano (Mujer ðŸ‘© / Hombre ðŸ‘¨),
+          mapa de calor dinÃ¡mico de activaciÃ³n muscular (rojo incandescente en agonista, Ã¡mbar en sinergistas),
+          vectores de tensiÃ³n elÃ¡stica cyan y HUD articular biomecÃ¡nico.
+        </p>
+      </div>
+
+      <div class="studio-layout">
+        <!-- Monitor 16:9 con HUD biomecÃ¡nico -->
+        <div class="studio-monitor-wrap">
+          <div class="monitor-screen">
+            <canvas id="master-canvas" class="studio-canvas"></canvas>
+
+            <!-- HUD Top Left -->
+            <div class="hud-top-left">
+              <div class="hud-pill"><span class="hud-pulse-dot"></span><span id="master-hud-target">ZONA: CUÃDRICEPS</span></div>
+              <div class="hud-pill"><span id="master-hud-angle">ÃNGULO RODILLA: 175Â°</span></div>
+            </div>
+
+            <!-- HUD Top Right -->
+            <div class="hud-top-right">
+              <div class="hud-pill phase-pill"><span id="master-hud-phase">FASE CONCÃ‰NTRICA</span></div>
+              <div class="hud-pill"><span id="master-hud-tension">TENSIÃ“N: 8.5 kg</span></div>
+            </div>
+
+            <!-- HUD Bottom Left (Medidor de activaciÃ³n) -->
+            <div class="hud-bottom-left">
+              <div class="hud-meter-box">
+                <div class="hud-meter-header">
+                  <span>ActivaciÃ³n Muscular:</span>
+                  <strong id="master-hud-pct">82%</strong>
+                </div>
+                <div class="hud-meter-track">
+                  <div id="master-hud-bar" class="hud-meter-fill"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Alerta de grabaciÃ³n -->
+            <div id="master-recording-badge" class="studio-recording-badge" style="display:none;">
+              <span class="rec-dot"></span> GRABANDO REPETICIÃ“N A 60 FPS (.WEBM)...
+            </div>
+          </div>
+
+          <!-- Barra de Controles del Monitor -->
+          <div class="studio-controls-bar">
+            <div class="studio-timeline-row">
+              <input type="range" id="master-scrubber" min="0" max="1000" value="0" class="studio-scrubber" title="LÃ­nea de tiempo del movimiento">
+            </div>
+
+            <div class="studio-actions-row">
+              <div class="studio-playback-group">
+                <button type="button" id="master-play-btn" onclick="BiomechEngine.toggleMasterPlay()" class="btn-studio-play">
+                  â¸ï¸ Pausa
+                </button>
+                <button type="button" onclick="BiomechEngine.selectMasterExercise(1)" class="btn-studio-icon" title="Reiniciar">
+                  ðŸ”„
+                </button>
+
+                <div class="studio-speed-group">
+                  <button type="button" class="speed-btn" data-speed="0.5" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                  <button type="button" class="speed-btn active" data-speed="1.0" onclick="BiomechEngine.setSpeed(1.0)">1.0x</button>
+                  <button type="button" class="speed-btn" data-speed="1.5" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+                </div>
+              </div>
+
+              <div class="studio-athlete-group">
+                <span class="group-label">Modelo:</span>
+                <button type="button" class="gender-btn-female active" onclick="BiomechEngine.setGlobalGender('female')">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="gender-btn-male" onclick="BiomechEngine.setGlobalGender('male')">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+
+              <div class="studio-download-group">
+                <button type="button" id="master-download-btn" onclick="BiomechEngine.recordVideoClip('master-canvas', 1, 'master-recording-badge', this)" class="btn-studio-download">
+                  ðŸ“¥ Descargar VÃ­deo 60 FPS (.webm)
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Selector RÃ¡pido de los 24 Ejercicios -->
+        <div class="studio-selector-panel">
+          <h3 class="panel-heading">âš¡ Selecciona Ejercicio (1 a 24):</h3>
+          <div class="ex-pills-grid">
+            <button type="button" class="master-ex-pill active" data-ex-id="1" onclick="BiomechEngine.selectMasterExercise(1)">#01. ExtensiÃ³n Rodilla (TKE)</button>
+            <button type="button" class="master-ex-pill" data-ex-id="2" onclick="BiomechEngine.selectMasterExercise(2)">#02. Sentadilla Frontal</button>
+            <button type="button" class="master-ex-pill" data-ex-id="3" onclick="BiomechEngine.selectMasterExercise(3)">#03. Wall Sit IsomÃ©trico</button>
+            <button type="button" class="master-ex-pill" data-ex-id="4" onclick="BiomechEngine.selectMasterExercise(4)">#04. Zancadas / Lunges</button>
+            <button type="button" class="master-ex-pill" data-ex-id="5" onclick="BiomechEngine.selectMasterExercise(5)">#05. Curl Femoral Prono</button>
+            <button type="button" class="master-ex-pill" data-ex-id="6" onclick="BiomechEngine.selectMasterExercise(6)">#06. Monster Walk Lateral</button>
+            <button type="button" class="master-ex-pill" data-ex-id="7" onclick="BiomechEngine.selectMasterExercise(7)">#07. Hip Thrust / Puente</button>
+            <button type="button" class="master-ex-pill" data-ex-id="8" onclick="BiomechEngine.selectMasterExercise(8)">#08. Peso Muerto Rumano</button>
+            <button type="button" class="master-ex-pill" data-ex-id="9" onclick="BiomechEngine.selectMasterExercise(9)">#09. Remo Horizontal</button>
+            <button type="button" class="master-ex-pill" data-ex-id="10" onclick="BiomechEngine.selectMasterExercise(10)">#10. JalÃ³n al Pecho</button>
+            <button type="button" class="master-ex-pill" data-ex-id="11" onclick="BiomechEngine.selectMasterExercise(11)">#11. Band Pull-Apart</button>
+            <button type="button" class="master-ex-pill" data-ex-id="12" onclick="BiomechEngine.selectMasterExercise(12)">#12. Face Pull</button>
+            <button type="button" class="master-ex-pill" data-ex-id="13" onclick="BiomechEngine.selectMasterExercise(13)">#13. Zancada Split</button>
+            <button type="button" class="master-ex-pill" data-ex-id="14" onclick="BiomechEngine.selectMasterExercise(14)">#14. Buenos DÃ­as</button>
+            <button type="button" class="master-ex-pill" data-ex-id="15" onclick="BiomechEngine.selectMasterExercise(15)">#15. Curl Femoral De Pie</button>
+            <button type="button" class="master-ex-pill" data-ex-id="16" onclick="BiomechEngine.selectMasterExercise(16)">#16. Elevaciones Laterales</button>
+            <button type="button" class="master-ex-pill" data-ex-id="17" onclick="BiomechEngine.selectMasterExercise(17)">#17. Aperturas Posteriores</button>
+            <button type="button" class="master-ex-pill" data-ex-id="18" onclick="BiomechEngine.selectMasterExercise(18)">#18. Flexiones Resistidas</button>
+            <button type="button" class="master-ex-pill" data-ex-id="19" onclick="BiomechEngine.selectMasterExercise(19)">#19. Pullover Dorsal</button>
+            <button type="button" class="master-ex-pill" data-ex-id="20" onclick="BiomechEngine.selectMasterExercise(20)">#20. ExtensiÃ³n TrÃ­ceps</button>
+            <button type="button" class="master-ex-pill" data-ex-id="21" onclick="BiomechEngine.selectMasterExercise(21)">#21. Curl Martillo BÃ­ceps</button>
+            <button type="button" class="master-ex-pill" data-ex-id="22" onclick="BiomechEngine.selectMasterExercise(22)">#22. Monster Walk Tobillos</button>
+            <button type="button" class="master-ex-pill" data-ex-id="23" onclick="BiomechEngine.selectMasterExercise(23)">#23. RotaciÃ³n Externa Hombro</button>
+            <button type="button" class="master-ex-pill" data-ex-id="24" onclick="BiomechEngine.selectMasterExercise(24)">#24. FlexiÃ³n Plantar Tobillo</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
       <div class="grid-container" id="exercisesGrid">
     <!-- EJERCICIO 01: EXTENSIÓN DE RODILLA TERMINAL (TKE) -->
     <article class="exercise-card" data-category="piernas" data-title="extensión de rodilla terminal con goma tke cuádriceps vasto interno" data-muscles="cuádriceps femoral vasto medial glúteo gemelos" id="ejercicio-1">
@@ -566,7 +1410,79 @@
           <h2 class="card-title">Extensión de Rodilla Terminal con Goma (TKE)</h2>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal(1)" title="Haz clic para ampliar la ilustración">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-1">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(1, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(1, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(1, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-1" onclick="BiomechEngine.setCardGender(1, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-1" onclick="BiomechEngine.setCardGender(1, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(1)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-1', 1, 'card-rec-1', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-1">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-1" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-1-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-1-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-1-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-1-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-1-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-1-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-1" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-1" onclick="BiomechEngine.toggleCardPlay(1)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-1" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-1" style="display:none;" onclick="openZoomModal(1)" title="Haz clic para ampliar la ilustración">
         <svg viewBox="0 0 540 220" width="100%" height="220" xmlns="http://www.w3.org/2000/svg" class="exercise-svg" preserveAspectRatio="xMidYMid meet">
           <defs>
             <marker id="arr-1" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -622,7 +1538,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -673,7 +1589,79 @@
           <h2 class="card-title">Sentadilla Frontal con Goma Pisada (Front Squat)</h2>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal(2)" title="Haz clic para ampliar la ilustración">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-2">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(2, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(2, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(2, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-2" onclick="BiomechEngine.setCardGender(2, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-2" onclick="BiomechEngine.setCardGender(2, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(2)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-2', 2, 'card-rec-2', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-2">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-2" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-2-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-2-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-2-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-2-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-2-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-2-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-2" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-2" onclick="BiomechEngine.toggleCardPlay(2)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-2" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-2" style="display:none;" onclick="openZoomModal(2)" title="Haz clic para ampliar la ilustración">
         <svg viewBox="0 0 540 220" width="100%" height="220" xmlns="http://www.w3.org/2000/svg" class="exercise-svg" preserveAspectRatio="xMidYMid meet">
           <defs>
             <marker id="arr-2" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -725,7 +1713,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -775,7 +1763,79 @@
           <h2 class="card-title">Sentadilla Isométrica en Pared (Wall Sit) con Miniband</h2>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal(3)" title="Haz clic para ampliar la ilustración">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-3">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(3, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(3, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(3, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-3" onclick="BiomechEngine.setCardGender(3, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-3" onclick="BiomechEngine.setCardGender(3, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(3)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-3', 3, 'card-rec-3', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-3">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-3" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-3-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-3-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-3-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-3-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-3-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-3-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-3" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-3" onclick="BiomechEngine.toggleCardPlay(3)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-3" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-3" style="display:none;" onclick="openZoomModal(3)" title="Haz clic para ampliar la ilustración">
         <svg viewBox="0 0 540 220" width="100%" height="220" xmlns="http://www.w3.org/2000/svg" class="exercise-svg" preserveAspectRatio="xMidYMid meet">
           <defs>
             <marker id="arr-3" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -823,7 +1883,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -873,7 +1933,79 @@
           <h2 class="card-title">Zancadas / Lunges con Goma Pisada</h2>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal(4)" title="Haz clic para ampliar la ilustración">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-4">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(4, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(4, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(4, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-4" onclick="BiomechEngine.setCardGender(4, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-4" onclick="BiomechEngine.setCardGender(4, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(4)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-4', 4, 'card-rec-4', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-4">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-4" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-4-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-4-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-4-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-4-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-4-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-4-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-4" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-4" onclick="BiomechEngine.toggleCardPlay(4)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-4" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-4" style="display:none;" onclick="openZoomModal(4)" title="Haz clic para ampliar la ilustración">
         <svg viewBox="0 0 540 220" width="100%" height="220" xmlns="http://www.w3.org/2000/svg" class="exercise-svg" preserveAspectRatio="xMidYMid meet">
           <defs>
             <marker id="arr-4" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -922,7 +2054,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -972,7 +2104,79 @@
           <h2 class="card-title">Curl Femoral con Goma (Prono / Suelo)</h2>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal(5)" title="Haz clic para ampliar la ilustración">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-5">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(5, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(5, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(5, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-5" onclick="BiomechEngine.setCardGender(5, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-5" onclick="BiomechEngine.setCardGender(5, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(5)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-5', 5, 'card-rec-5', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-5">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-5" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-5-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-5-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-5-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-5-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-5-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-5-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-5" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-5" onclick="BiomechEngine.toggleCardPlay(5)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-5" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-5" style="display:none;" onclick="openZoomModal(5)" title="Haz clic para ampliar la ilustración">
         <svg viewBox="0 0 540 220" width="100%" height="220" xmlns="http://www.w3.org/2000/svg" class="exercise-svg" preserveAspectRatio="xMidYMid meet">
           <defs>
             <marker id="arr-5" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -1018,7 +2222,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -1069,7 +2273,79 @@
           <h2 class="card-title">Pasos Laterales con Miniband (Monster Walk)</h2>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal(6)" title="Haz clic para ampliar la ilustración">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-6">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(6, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(6, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(6, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-6" onclick="BiomechEngine.setCardGender(6, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-6" onclick="BiomechEngine.setCardGender(6, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(6)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-6', 6, 'card-rec-6', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-6">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-6" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-6-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-6-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-6-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-6-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-6-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-6-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-6" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-6" onclick="BiomechEngine.toggleCardPlay(6)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-6" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-6" style="display:none;" onclick="openZoomModal(6)" title="Haz clic para ampliar la ilustración">
         <svg viewBox="0 0 540 220" width="100%" height="220" xmlns="http://www.w3.org/2000/svg" class="exercise-svg" preserveAspectRatio="xMidYMid meet">
           <defs>
             <marker id="arr-6" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -1119,7 +2395,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -1170,7 +2446,79 @@
           <h2 class="card-title">Puente de Glúteo / Hip Thrust con Banda</h2>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal(7)" title="Haz clic para ampliar la ilustración">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-7">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(7, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(7, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(7, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-7" onclick="BiomechEngine.setCardGender(7, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-7" onclick="BiomechEngine.setCardGender(7, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(7)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-7', 7, 'card-rec-7', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-7">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-7" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-7-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-7-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-7-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-7-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-7-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-7-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-7" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-7" onclick="BiomechEngine.toggleCardPlay(7)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-7" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-7" style="display:none;" onclick="openZoomModal(7)" title="Haz clic para ampliar la ilustración">
         <svg viewBox="0 0 540 220" width="100%" height="220" xmlns="http://www.w3.org/2000/svg" class="exercise-svg" preserveAspectRatio="xMidYMid meet">
           <defs>
             <marker id="arr-7" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -1215,7 +2563,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -1266,7 +2614,79 @@
           <h2 class="card-title">Peso Muerto Rumano con Banda (RDL)</h2>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal(8)" title="Haz clic para ampliar la ilustración">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-8">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(8, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(8, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(8, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-8" onclick="BiomechEngine.setCardGender(8, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-8" onclick="BiomechEngine.setCardGender(8, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(8)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-8', 8, 'card-rec-8', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-8">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-8" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-8-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-8-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-8-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-8-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-8-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-8-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-8" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-8" onclick="BiomechEngine.toggleCardPlay(8)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-8" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-8" style="display:none;" onclick="openZoomModal(8)" title="Haz clic para ampliar la ilustración">
         <svg viewBox="0 0 540 220" width="100%" height="220" xmlns="http://www.w3.org/2000/svg" class="exercise-svg" preserveAspectRatio="xMidYMid meet">
           <defs>
             <marker id="arr-8" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -1316,7 +2736,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -1366,7 +2786,79 @@
           <h2 class="card-title">Remo Horizontal con Goma (Sentado o de Pie)</h2>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal(9)" title="Haz clic para ampliar la ilustración">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-9">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(9, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(9, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(9, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-9" onclick="BiomechEngine.setCardGender(9, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-9" onclick="BiomechEngine.setCardGender(9, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(9)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-9', 9, 'card-rec-9', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-9">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-9" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-9-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-9-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-9-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-9-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-9-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-9-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-9" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-9" onclick="BiomechEngine.toggleCardPlay(9)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-9" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-9" style="display:none;" onclick="openZoomModal(9)" title="Haz clic para ampliar la ilustración">
         <svg viewBox="0 0 540 220" width="100%" height="220" xmlns="http://www.w3.org/2000/svg" class="exercise-svg" preserveAspectRatio="xMidYMid meet">
           <defs>
             <marker id="arr-9" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -1415,7 +2907,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -1466,7 +2958,79 @@
           <h2 class="card-title">Jalón al Pecho con Goma (Lat Pulldown)</h2>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal(10)" title="Haz clic para ampliar la ilustración">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-10">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(10, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(10, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(10, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-10" onclick="BiomechEngine.setCardGender(10, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-10" onclick="BiomechEngine.setCardGender(10, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(10)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-10', 10, 'card-rec-10', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-10">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-10" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-10-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-10-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-10-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-10-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-10-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-10-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-10" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-10" onclick="BiomechEngine.toggleCardPlay(10)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-10" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-10" style="display:none;" onclick="openZoomModal(10)" title="Haz clic para ampliar la ilustración">
         <svg viewBox="0 0 540 220" width="100%" height="220" xmlns="http://www.w3.org/2000/svg" class="exercise-svg" preserveAspectRatio="xMidYMid meet">
           <defs>
             <marker id="arr-10" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -1517,7 +3081,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -1568,7 +3132,79 @@
           <h2 class="card-title">Band Pull-Apart (Separaciones Horizontales)</h2>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal(11)" title="Haz clic para ampliar la ilustración">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-11">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(11, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(11, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(11, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-11" onclick="BiomechEngine.setCardGender(11, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-11" onclick="BiomechEngine.setCardGender(11, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(11)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-11', 11, 'card-rec-11', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-11">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-11" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-11-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-11-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-11-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-11-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-11-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-11-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-11" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-11" onclick="BiomechEngine.toggleCardPlay(11)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-11" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-11" style="display:none;" onclick="openZoomModal(11)" title="Haz clic para ampliar la ilustración">
         <svg viewBox="0 0 540 220" width="100%" height="220" xmlns="http://www.w3.org/2000/svg" class="exercise-svg" preserveAspectRatio="xMidYMid meet">
           <defs>
             <marker id="arr-11" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -1616,7 +3252,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -1667,7 +3303,79 @@
           <h2 class="card-title">Face Pull con Banda</h2>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal(12)" title="Haz clic para ampliar la ilustración">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-12">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(12, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(12, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(12, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-12" onclick="BiomechEngine.setCardGender(12, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-12" onclick="BiomechEngine.setCardGender(12, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(12)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-12', 12, 'card-rec-12', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-12">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-12" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-12-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-12-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-12-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-12-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-12-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-12-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-12" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-12" onclick="BiomechEngine.toggleCardPlay(12)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-12" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-12" style="display:none;" onclick="openZoomModal(12)" title="Haz clic para ampliar la ilustración">
         <svg viewBox="0 0 540 220" width="100%" height="220" xmlns="http://www.w3.org/2000/svg" class="exercise-svg" preserveAspectRatio="xMidYMid meet">
           <defs>
             <marker id="arr-12" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -1714,7 +3422,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -1753,7 +3461,7 @@
     </article>
 
     <!-- EJERCICIO 13: ZANCADA BÚLGARA / SPLIT SQUAT CON BANDA -->
-    <article class="ex-card" data-category="pierna cadera" data-number="13">
+    <article class="ex-card" data-category="pierna cadera" data-number="13" id="ejercicio-13">
       <div class="card-header">
         <span class="ex-num">#13</span>
         <div class="ex-titles">
@@ -1761,7 +3469,79 @@
           <p class="subtitle">Trabajo unilateral de fuerza para cuádriceps, glúteo y estabilidad pélvica</p>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal('svg-ex-13', 'Zancada Split con Banda')">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-13">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(13, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(13, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(13, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-13" onclick="BiomechEngine.setCardGender(13, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-13" onclick="BiomechEngine.setCardGender(13, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(13)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-13', 13, 'card-rec-13', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-13">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-13" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-13-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-13-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-13-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-13-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-13-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-13-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-13" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-13" onclick="BiomechEngine.toggleCardPlay(13)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-13" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-13" style="display:none;" onclick="openZoomModal('svg-ex-13', 'Zancada Split con Banda')">
         <svg id="svg-ex-13" viewBox="0 0 540 220" class="exercise-svg" role="img" aria-label="Zancada Split con Banda">
           <defs>
             <marker id="arr-13" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto">
@@ -1821,7 +3601,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -1859,7 +3639,7 @@
     </article>
 
     <!-- EJERCICIO 14: BUENOS DÍAS CON BANDA (BISAGRA DE CADERA) -->
-    <article class="ex-card" data-category="cadera lumbar pierna" data-number="14">
+    <article class="ex-card" data-category="cadera lumbar pierna" data-number="14" id="ejercicio-14">
       <div class="card-header">
         <span class="ex-num">#14</span>
         <div class="ex-titles">
@@ -1867,7 +3647,79 @@
           <p class="subtitle">Patrón maestro de bisagra de cadera, isquiotibiales, glúteos y lumbares protectores</p>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal('svg-ex-14', 'Buenos Días con Banda')">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-14">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(14, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(14, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(14, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-14" onclick="BiomechEngine.setCardGender(14, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-14" onclick="BiomechEngine.setCardGender(14, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(14)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-14', 14, 'card-rec-14', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-14">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-14" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-14-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-14-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-14-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-14-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-14-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-14-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-14" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-14" onclick="BiomechEngine.toggleCardPlay(14)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-14" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-14" style="display:none;" onclick="openZoomModal('svg-ex-14', 'Buenos Días con Banda')">
         <svg id="svg-ex-14" viewBox="0 0 540 220" class="exercise-svg" role="img" aria-label="Buenos Días con Banda">
           <defs>
             <marker id="arr-14" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto">
@@ -1918,7 +3770,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -1956,7 +3808,7 @@
     </article>
 
     <!-- EJERCICIO 15: CURL FEMORAL TUMBADO/DE PIE CON BANDA -->
-    <article class="ex-card" data-category="pierna cadera" data-number="15">
+    <article class="ex-card" data-category="pierna cadera" data-number="15" id="ejercicio-15">
       <div class="card-header">
         <span class="ex-num">#15</span>
         <div class="ex-titles">
@@ -1964,7 +3816,79 @@
           <p class="subtitle">Aislamiento de la flexión de rodilla para la salud del ligamento cruzado e isquiotibiales</p>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal('svg-ex-15', 'Curl Femoral con Banda')">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-15">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(15, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(15, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(15, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-15" onclick="BiomechEngine.setCardGender(15, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-15" onclick="BiomechEngine.setCardGender(15, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(15)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-15', 15, 'card-rec-15', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-15">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-15" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-15-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-15-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-15-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-15-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-15-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-15-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-15" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-15" onclick="BiomechEngine.toggleCardPlay(15)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-15" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-15" style="display:none;" onclick="openZoomModal('svg-ex-15', 'Curl Femoral con Banda')">
         <svg id="svg-ex-15" viewBox="0 0 540 220" class="exercise-svg" role="img" aria-label="Curl Femoral con Banda">
           <defs>
             <marker id="arr-15" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto">
@@ -2016,7 +3940,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -2054,7 +3978,7 @@
     </article>
 
     <!-- EJERCICIO 16: ELEVACIONES LATERALES DE HOMBRO CON BANDA -->
-    <article class="ex-card" data-category="hombro espalda" data-number="16">
+    <article class="ex-card" data-category="hombro espalda" data-number="16" id="ejercicio-16">
       <div class="card-header">
         <span class="ex-num">#16</span>
         <div class="ex-titles">
@@ -2062,7 +3986,79 @@
           <p class="subtitle">Desarrollo del deltoides lateral sin pinzamiento subacromial</p>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal('svg-ex-16', 'Elevaciones Laterales')">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-16">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(16, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(16, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(16, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-16" onclick="BiomechEngine.setCardGender(16, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-16" onclick="BiomechEngine.setCardGender(16, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(16)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-16', 16, 'card-rec-16', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-16">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-16" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-16-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-16-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-16-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-16-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-16-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-16-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-16" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-16" onclick="BiomechEngine.toggleCardPlay(16)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-16" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-16" style="display:none;" onclick="openZoomModal('svg-ex-16', 'Elevaciones Laterales')">
         <svg id="svg-ex-16" viewBox="0 0 540 220" class="exercise-svg" role="img" aria-label="Elevaciones Laterales con Banda">
           <defs>
             <marker id="arr-16" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto">
@@ -2118,7 +4114,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -2157,7 +4153,7 @@
     </article>
 
     <!-- EJERCICIO 17: BAND PULL-APART (APERTURAS POSTERIORES) -->
-    <article class="ex-card" data-category="espalda hombro" data-number="17">
+    <article class="ex-card" data-category="espalda hombro" data-number="17" id="ejercicio-17">
       <div class="card-header">
         <span class="ex-num">#17</span>
         <div class="ex-titles">
@@ -2165,7 +4161,79 @@
           <p class="subtitle">Salud postural inmediata: retracción escapular activa y manguito posterior</p>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal('svg-ex-17', 'Band Pull-Apart')">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-17">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(17, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(17, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(17, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-17" onclick="BiomechEngine.setCardGender(17, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-17" onclick="BiomechEngine.setCardGender(17, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(17)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-17', 17, 'card-rec-17', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-17">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-17" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-17-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-17-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-17-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-17-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-17-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-17-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-17" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-17" onclick="BiomechEngine.toggleCardPlay(17)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-17" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-17" style="display:none;" onclick="openZoomModal('svg-ex-17', 'Band Pull-Apart')">
         <svg id="svg-ex-17" viewBox="0 0 540 220" class="exercise-svg" role="img" aria-label="Band Pull-Apart">
           <defs>
             <marker id="arr-17" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto">
@@ -2217,7 +4285,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -2256,7 +4324,7 @@
     </article>
 
     <!-- EJERCICIO 18: FLEXIONES RESISTIDAS CON BANDA -->
-    <article class="ex-card" data-category="pecho brazos core" data-number="18">
+    <article class="ex-card" data-category="pecho brazos core" data-number="18" id="ejercicio-18">
       <div class="card-header">
         <span class="ex-num">#18</span>
         <div class="ex-titles">
@@ -2264,7 +4332,79 @@
           <p class="subtitle">Sobrecarga elástica progresiva en el bloqueo y activación del serrato anterior</p>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal('svg-ex-18', 'Flexiones con Banda')">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-18">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(18, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(18, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(18, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-18" onclick="BiomechEngine.setCardGender(18, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-18" onclick="BiomechEngine.setCardGender(18, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(18)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-18', 18, 'card-rec-18', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-18">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-18" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-18-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-18-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-18-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-18-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-18-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-18-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-18" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-18" onclick="BiomechEngine.toggleCardPlay(18)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-18" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-18" style="display:none;" onclick="openZoomModal('svg-ex-18', 'Flexiones con Banda')">
         <svg id="svg-ex-18" viewBox="0 0 540 220" class="exercise-svg" role="img" aria-label="Flexiones con Banda">
           <defs>
             <marker id="arr-18" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto">
@@ -2317,7 +4457,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -2355,7 +4495,7 @@
     </article>
 
     <!-- EJERCICIO 19: PULLOVER DORSAL CON BANDA ALTA -->
-    <article class="ex-card" data-category="espalda brazos" data-number="19">
+    <article class="ex-card" data-category="espalda brazos" data-number="19" id="ejercicio-19">
       <div class="card-header">
         <span class="ex-num">#19</span>
         <div class="ex-titles">
@@ -2363,7 +4503,79 @@
           <p class="subtitle">Extensión pura de hombros para máxima amplitud y apertura del dorsal ancho</p>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal('svg-ex-19', 'Pullover Dorsal con Banda')">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-19">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(19, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(19, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(19, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-19" onclick="BiomechEngine.setCardGender(19, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-19" onclick="BiomechEngine.setCardGender(19, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(19)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-19', 19, 'card-rec-19', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-19">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-19" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-19-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-19-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-19-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-19-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-19-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-19-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-19" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-19" onclick="BiomechEngine.toggleCardPlay(19)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-19" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-19" style="display:none;" onclick="openZoomModal('svg-ex-19', 'Pullover Dorsal con Banda')">
         <svg id="svg-ex-19" viewBox="0 0 540 220" class="exercise-svg" role="img" aria-label="Pullover Dorsal con Banda">
           <defs>
             <marker id="arr-19" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto">
@@ -2417,7 +4629,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -2455,7 +4667,7 @@
     </article>
 
     <!-- EJERCICIO 20: PRESS FRANCÉS / EXTENSIÓN SOBRE LA CABEZA -->
-    <article class="ex-card" data-category="brazos" data-number="20">
+    <article class="ex-card" data-category="brazos" data-number="20" id="ejercicio-20">
       <div class="card-header">
         <span class="ex-num">#20</span>
         <div class="ex-titles">
@@ -2463,7 +4675,79 @@
           <p class="subtitle">Máximo reclutamiento de la porción larga del tríceps por flexión de hombro</p>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal('svg-ex-20', 'Extensión de Tríceps con Banda')">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-20">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(20, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(20, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(20, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-20" onclick="BiomechEngine.setCardGender(20, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-20" onclick="BiomechEngine.setCardGender(20, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(20)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-20', 20, 'card-rec-20', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-20">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-20" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-20-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-20-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-20-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-20-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-20-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-20-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-20" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-20" onclick="BiomechEngine.toggleCardPlay(20)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-20" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-20" style="display:none;" onclick="openZoomModal('svg-ex-20', 'Extensión de Tríceps con Banda')">
         <svg id="svg-ex-20" viewBox="0 0 540 220" class="exercise-svg" role="img" aria-label="Extensión de Tríceps con Banda">
           <defs>
             <marker id="arr-20" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto">
@@ -2513,7 +4797,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -2551,7 +4835,7 @@
     </article>
 
     <!-- EJERCICIO 21: CURL MARTILLO Y SUPINACIÓN DE BÍCEPS -->
-    <article class="ex-card" data-category="brazos" data-number="21">
+    <article class="ex-card" data-category="brazos" data-number="21" id="ejercicio-21">
       <div class="card-header">
         <span class="ex-num">#21</span>
         <div class="ex-titles">
@@ -2559,7 +4843,79 @@
           <p class="subtitle">Trabajo integral de flexión del codo y rotación radio-cubital</p>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal('svg-ex-21', 'Curl de Bíceps con Banda')">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-21">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(21, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(21, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(21, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-21" onclick="BiomechEngine.setCardGender(21, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-21" onclick="BiomechEngine.setCardGender(21, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(21)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-21', 21, 'card-rec-21', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-21">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-21" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-21-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-21-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-21-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-21-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-21-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-21-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-21" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-21" onclick="BiomechEngine.toggleCardPlay(21)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-21" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-21" style="display:none;" onclick="openZoomModal('svg-ex-21', 'Curl de Bíceps con Banda')">
         <svg id="svg-ex-21" viewBox="0 0 540 220" class="exercise-svg" role="img" aria-label="Curl de Bíceps con Banda">
           <defs>
             <marker id="arr-21" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto">
@@ -2613,7 +4969,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -2651,7 +5007,7 @@
     </article>
 
     <!-- EJERCICIO 22: MONSTER WALK CON MINIBAND EN TOBILLOS -->
-    <article class="ex-card" data-category="pierna cadera" data-number="22">
+    <article class="ex-card" data-category="pierna cadera" data-number="22" id="ejercicio-22">
       <div class="card-header">
         <span class="ex-num">#22</span>
         <div class="ex-titles">
@@ -2659,7 +5015,79 @@
           <p class="subtitle">Blindaje del glúteo medio, prevención de valgo de rodilla y estabilidad en carrera</p>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal('svg-ex-22', 'Monster Walk con Miniband')">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-22">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(22, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(22, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(22, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-22" onclick="BiomechEngine.setCardGender(22, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-22" onclick="BiomechEngine.setCardGender(22, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(22)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-22', 22, 'card-rec-22', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-22">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-22" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-22-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-22-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-22-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-22-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-22-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-22-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-22" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-22" onclick="BiomechEngine.toggleCardPlay(22)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-22" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-22" style="display:none;" onclick="openZoomModal('svg-ex-22', 'Monster Walk con Miniband')">
         <svg id="svg-ex-22" viewBox="0 0 540 220" class="exercise-svg" role="img" aria-label="Monster Walk con Miniband">
           <defs>
             <marker id="arr-22" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto">
@@ -2713,7 +5141,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -2751,7 +5179,7 @@
     </article>
 
     <!-- EJERCICIO 23: ROTACIÓN EXTERNA DE HOMBRO A 90° CON BANDA -->
-    <article class="ex-card" data-category="hombro espalda" data-number="23">
+    <article class="ex-card" data-category="hombro espalda" data-number="23" id="ejercicio-23">
       <div class="card-header">
         <span class="ex-num">#23</span>
         <div class="ex-titles">
@@ -2759,7 +5187,79 @@
           <p class="subtitle">Blindaje del infraespinoso y estabilización dinámica de la cabeza humeral</p>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal('svg-ex-23', 'Rotación Externa de Hombro')">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-23">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(23, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(23, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(23, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-23" onclick="BiomechEngine.setCardGender(23, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-23" onclick="BiomechEngine.setCardGender(23, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(23)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-23', 23, 'card-rec-23', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-23">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-23" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-23-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-23-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-23-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-23-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-23-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-23-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-23" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-23" onclick="BiomechEngine.toggleCardPlay(23)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-23" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-23" style="display:none;" onclick="openZoomModal('svg-ex-23', 'Rotación Externa de Hombro')">
         <svg id="svg-ex-23" viewBox="0 0 540 220" class="exercise-svg" role="img" aria-label="Rotación Externa de Hombro">
           <defs>
             <marker id="arr-23" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto">
@@ -2815,7 +5315,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -2853,7 +5353,7 @@
     </article>
 
     <!-- EJERCICIO 24: ELEVACIÓN DE GEMELOS / FLEXIÓN PLANTAR -->
-    <article class="ex-card" data-category="pierna" data-number="24">
+    <article class="ex-card" data-category="pierna" data-number="24" id="ejercicio-24">
       <div class="card-header">
         <span class="ex-num">#24</span>
         <div class="ex-titles">
@@ -2861,7 +5361,79 @@
           <p class="subtitle">Propulsión elástica, prevención de fascitis plantar y reactividad del tendón de Aquiles</p>
         </div>
       </div>
-      <div class="svg-container" onclick="openZoomModal('svg-ex-24', 'Flexión Plantar con Banda')">
+              <!-- CAJA DUAL INTERACTIVA: VÃDEO 60 FPS + LÃMINA TÃ‰CNICA SVG -->
+        <div class="card-media-box">
+          <div class="card-media-toolbar">
+            <div class="media-tabs" id="card-media-tabs-24">
+              <button type="button" class="media-tab-btn active" data-mode="video" onclick="BiomechEngine.switchCardView(24, 'video')">
+                ðŸŽ¬ VÃ­deo 60 FPS
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="svg" onclick="BiomechEngine.switchCardView(24, 'svg')">
+                ðŸ“ LÃ¡mina SVG
+              </button>
+              <button type="button" class="media-tab-btn" data-mode="both" onclick="BiomechEngine.switchCardView(24, 'both')">
+                ðŸ”€ Ver Ambos
+              </button>
+            </div>
+
+            <div class="media-actions">
+              <div class="card-gender-group">
+                <button type="button" class="card-gender-btn active" id="card-gender-f-24" onclick="BiomechEngine.setCardGender(24, 'female')" title="Modelo Mujer">
+                  ðŸ‘© Mujer
+                </button>
+                <button type="button" class="card-gender-btn" id="card-gender-m-24" onclick="BiomechEngine.setCardGender(24, 'male')" title="Modelo Hombre">
+                  ðŸ‘¨ Hombre
+                </button>
+              </div>
+              <button type="button" class="card-btn-action card-btn-pdf" onclick="BiomechEngine.printCard(24)" title="Imprimir o guardar en PDF solo esta ficha tÃ©cnica">
+                ðŸ–¨ï¸ Ficha PDF
+              </button>
+              <button type="button" class="card-btn-action card-btn-download" onclick="BiomechEngine.recordVideoClip('card-canvas-24', 24, 'card-rec-24', this)" title="Descargar vÃ­deo 60 FPS (.webm) de este ejercicio">
+                ðŸ“¥ Descargar VÃ­deo (.webm)
+              </button>
+            </div>
+          </div>
+
+          <!-- Reproductor de VÃ­deo BiomecÃ¡nico 60 FPS -->
+          <div class="card-video-wrap" id="card-video-wrap-24">
+            <div class="card-canvas-monitor">
+              <canvas id="card-canvas-24" class="card-canvas"></canvas>
+
+              <div class="card-hud-tl">
+                <div class="card-hud-badge"><span class="hud-dot-pulse"></span><span id="card-hud-24-target">ZONA ACTIVA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-24-angle">ÃNGULO: --Â°</span></div>
+              </div>
+
+              <div class="card-hud-tr">
+                <div class="card-hud-badge"><span id="card-hud-24-phase">CONCÃ‰NTRICA</span></div>
+                <div class="card-hud-badge"><span id="card-hud-24-tension">TENSIÃ“N: -- kg</span></div>
+              </div>
+
+              <div class="card-hud-bl">
+                <div class="card-meter-box">
+                  <div class="card-meter-header"><span>ActivaciÃ³n:</span><strong id="card-hud-24-pct">20%</strong></div>
+                  <div class="card-meter-track"><div id="card-hud-24-bar" class="card-meter-fill"></div></div>
+                </div>
+              </div>
+
+              <div id="card-rec-24" class="card-rec-badge" style="display:none;">
+                <span class="rec-dot"></span> GRABANDO CLIP 60 FPS...
+              </div>
+            </div>
+
+            <div class="card-video-controls">
+              <button type="button" class="card-play-btn" id="card-play-btn-24" onclick="BiomechEngine.toggleCardPlay(24)" title="Pausar / Reanudar">â¸ï¸</button>
+              <input type="range" class="card-scrubber" id="card-scrubber-24" min="0" max="1000" value="0">
+              <div class="card-speed-mini">
+                <button type="button" onclick="BiomechEngine.setSpeed(0.5)">0.5x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.0)" class="active">1x</button>
+                <button type="button" onclick="BiomechEngine.setSpeed(1.5)">1.5x</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- LÃ¡mina TÃ©cnica AnatÃ³mica SVG -->
+          <div class="svg-container" id="card-svg-wrap-24" style="display:none;" onclick="openZoomModal('svg-ex-24', 'Flexión Plantar con Banda')">
         <svg id="svg-ex-24" viewBox="0 0 540 220" class="exercise-svg" role="img" aria-label="Flexión Plantar con Banda">
           <defs>
             <marker id="arr-24" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto">
@@ -2915,7 +5487,7 @@
         </svg>
         <div class="zoom-hint">🔍 Haz clic en el dibujo para ampliar</div>
       </div>
-      <div class="card-body">
+        </div><div class="card-body">
         <div class="info-box box-placement">
           <div class="box-header"><span class="box-icon">📍</span><span class="box-title">¿DÓNDE Y CÓMO COLOCAR LA GOMA?</span></div>
           <div class="box-content">
@@ -4304,5 +6876,6 @@
       }
     });
   </script>
+  <script src="biomech_engine.js"></script>
 </body>
 </html>
