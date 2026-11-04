@@ -58,16 +58,16 @@
       const t = prog / 0.45;
       // Smoothstep easing
       tNorm = t * t * (3 - 2 * t);
-      phase = 'Fase Concéntrica';
+      phase = 'Fase concéntrica';
       phaseColor = '#f59e0b';
     } else if (prog <= 0.60) {
       tNorm = 1.0;
-      phase = 'Pico Isométrico';
+      phase = 'Pico isométrico';
       phaseColor = '#ef4444'; // Red hot
     } else {
       const t = (prog - 0.60) / 0.40;
       tNorm = 1.0 - (t * t * (3 - 2 * t));
-      phase = 'Fase Excéntrica';
+      phase = 'Fase excéntrica';
       phaseColor = '#10b981'; // Green control
     }
 
@@ -246,11 +246,11 @@
   const EXERCISES = [
     {
       id: 1,
-      name: 'Extensión de Rodilla Terminal (TKE)',
+      name: 'Extensión de rodilla terminal (TKE)',
       category: 'piernas',
-      target: 'Cuádriceps (Vasto Medial)',
+      target: 'Cuádriceps (vasto medial)',
       synergists: 'Glúteo mayor, Gemelos',
-      angleName: 'Ángulo Rodilla',
+      angleName: 'Ángulo de rodilla',
       angleMin: 140,
       angleMax: 180,
       tensionMin: 3.5,
@@ -313,11 +313,11 @@
     },
     {
       id: 2,
-      name: 'Sentadilla Frontal con Goma Pisada',
+      name: 'Sentadilla frontal con goma pisada',
       category: 'piernas',
-      target: 'Cuádriceps y Glúteos',
+      target: 'Cuádriceps y glúteos',
       synergists: 'Core, Aductores',
-      angleName: 'Ángulo Rodilla',
+      angleName: 'Ángulo de rodilla',
       angleMin: 85,
       angleMax: 175,
       tensionMin: 5.0,
@@ -385,11 +385,11 @@
     },
     {
       id: 3,
-      name: 'Sentadilla Isométrica en Pared (Wall Sit)',
+      name: 'Sentadilla isométrica en pared (wall sit)',
       category: 'piernas',
-      target: 'Cuádriceps (Isometría)',
+      target: 'Cuádriceps (isometría)',
       synergists: 'Glúteo medio, Core',
-      angleName: 'Ángulo Rodilla',
+      angleName: 'Ángulo de rodilla',
       angleMin: 90,
       angleMax: 90,
       tensionMin: 8.0,
@@ -450,11 +450,11 @@
     },
     {
       id: 4,
-      name: 'Zancadas / Lunges con Goma Pisada',
+      name: 'Zancadas con goma pisada (lunges)',
       category: 'piernas',
-      target: 'Cuádriceps y Glúteo Mayor',
+      target: 'Cuádriceps y glúteo mayor',
       synergists: 'Isquios, Core',
-      angleName: 'Rodilla Delantera',
+      angleName: 'Rodilla delantera',
       angleMin: 90,
       angleMax: 165,
       tensionMin: 4.0,
@@ -511,11 +511,11 @@
     },
     {
       id: 5,
-      name: 'Curl Femoral con Goma (Prono / Suelo)',
+      name: 'Curl femoral con goma (prono / suelo)',
       category: 'piernas',
-      target: 'Isquiotibiales (Bíceps Femoral)',
+      target: 'Isquiotibiales (bíceps femoral)',
       synergists: 'Gastrocnemio, Glúteos',
-      angleName: 'Flexión Rodilla',
+      angleName: 'Flexión de rodilla',
       angleMin: 175,
       angleMax: 60,
       tensionMin: 3.0,
@@ -575,11 +575,11 @@
     },
     {
       id: 6,
-      name: 'Pasos Laterales con Miniband (Monster Walk)',
+      name: 'Pasos laterales con miniband (monster walk)',
       category: 'piernas',
-      target: 'Glúteo Medio y Mínimo',
+      target: 'Glúteo medio y menor',
       synergists: 'Tensor Fascia Lata, Cuádriceps',
-      angleName: 'Abducción Cadera',
+      angleName: 'Abducción de cadera',
       angleMin: 15,
       angleMax: 45,
       tensionMin: 4.5,
@@ -624,11 +624,11 @@
     },
     {
       id: 7,
-      name: 'Puente de Glúteo / Hip Thrust con Banda',
+      name: 'Puente de glúteo con banda (hip thrust)',
       category: 'piernas',
-      target: 'Glúteo Mayor (Extensión)',
+      target: 'Glúteo mayor (extensión)',
       synergists: 'Isquios, Erectores Espinales',
-      angleName: 'Extensión Cadera',
+      angleName: 'Extensión de cadera',
       angleMin: 100,
       angleMax: 180,
       tensionMin: 6.0,
@@ -678,11 +678,11 @@
     },
     {
       id: 8,
-      name: 'Peso Muerto Rumano con Banda (RDL)',
+      name: 'Peso muerto rumano con banda (RDL)',
       category: 'piernas',
-      target: 'Isquiotibiales y Cadena Posterior',
+      target: 'Isquiotibiales y cadena posterior',
       synergists: 'Glúteos, Erectores Lumbares',
-      angleName: 'Bisagra de Cadera',
+      angleName: 'Bisagra de cadera',
       angleMin: 80,
       angleMax: 175,
       tensionMin: 5.5,
@@ -754,11 +754,11 @@
     },
     {
       id: 9,
-      name: 'Remo Horizontal con Goma',
+      name: 'Remo horizontal con goma',
       category: 'espalda',
-      target: 'Dorsal Ancho y Romboides',
+      target: 'Dorsal ancho y romboides',
       synergists: 'Bíceps, Trapecio medio',
-      angleName: 'Ángulo Codo',
+      angleName: 'Ángulo de codo',
       angleMin: 170,
       angleMax: 70,
       tensionMin: 4.0,
@@ -812,11 +812,11 @@
     },
     {
       id: 10,
-      name: 'Jalón al Pecho con Goma (Lat Pulldown)',
+      name: 'Jalón al pecho con goma (lat pulldown)',
       category: 'espalda',
-      target: 'Dorsal Ancho (Tracción Vertical)',
+      target: 'Dorsal ancho (tracción vertical)',
       synergists: 'Redondo Mayor, Bíceps',
-      angleName: 'Ángulo Hombro',
+      angleName: 'Ángulo de hombro',
       angleMin: 170,
       angleMax: 70,
       tensionMin: 4.5,
@@ -877,11 +877,11 @@
     },
     {
       id: 11,
-      name: 'Band Pull-Apart (Separaciones Horizontales)',
+      name: 'Band pull-apart (separaciones horizontales)',
       category: 'espalda',
-      target: 'Deltoides Posterior y Romboides',
+      target: 'Deltoides posterior y romboides',
       synergists: 'Trapecio Medio, Infraespinoso',
-      angleName: 'Abducción Horizontal',
+      angleName: 'Abducción horizontal',
       angleMin: 0,
       angleMax: 90,
       tensionMin: 2.5,
@@ -937,11 +937,11 @@
     },
     {
       id: 12,
-      name: 'Face Pull con Banda',
+      name: 'Face pull con banda',
       category: 'hombros',
-      target: 'Deltoides Posterior y Rotadores Externos',
+      target: 'Deltoides posterior y rotadores externos',
       synergists: 'Trapecio, Romboides',
-      angleName: 'Rotación Externa',
+      angleName: 'Rotación externa',
       angleMin: 0,
       angleMax: 75,
       tensionMin: 3.0,
@@ -998,11 +998,11 @@
     },
     {
       id: 13,
-      name: 'Zancada Split con Banda Pisada',
+      name: 'Zancada split con banda pisada',
       category: 'piernas',
-      target: 'Cuádriceps y Glúteo Mayor Unilateral',
+      target: 'Cuádriceps y glúteo mayor unilateral',
       synergists: 'Estabilizadores de Pelvis',
-      angleName: 'Rodilla Delantera',
+      angleName: 'Rodilla delantera',
       angleMin: 85,
       angleMax: 170,
       tensionMin: 5.0,
@@ -1014,11 +1014,11 @@
     },
     {
       id: 14,
-      name: 'Buenos Días con Banda (Good Mornings)',
+      name: 'Buenos días con banda (good mornings)',
       category: 'piernas',
-      target: 'Bisagra de Cadera, Isquios y Lumbar',
+      target: 'Bisagra de cadera, isquiotibiales y lumbar',
       synergists: 'Glúteos, Erectores de Columna',
-      angleName: 'Flexión Cadera',
+      angleName: 'Flexión de cadera',
       angleMin: 85,
       angleMax: 175,
       tensionMin: 4.5,
@@ -1078,11 +1078,11 @@
     },
     {
       id: 15,
-      name: 'Curl Femoral de Pie con Banda Elástica',
+      name: 'Curl femoral de pie con banda elástica',
       category: 'piernas',
-      target: 'Isquiotibiales (Aislamiento)',
+      target: 'Isquiotibiales (aislamiento)',
       synergists: 'Gastrocnemio',
-      angleName: 'Flexión Rodilla',
+      angleName: 'Flexión de rodilla',
       angleMin: 170,
       angleMax: 65,
       tensionMin: 3.5,
@@ -1147,11 +1147,11 @@
     },
     {
       id: 16,
-      name: 'Elevaciones Laterales en Plano Escapular',
+      name: 'Elevaciones laterales en plano escapular',
       category: 'hombros',
-      target: 'Deltoides Lateral (Scaption)',
+      target: 'Deltoides lateral (plano escapular)',
       synergists: 'Supraespinoso, Serrato',
-      angleName: 'Abducción Brazo',
+      angleName: 'Abducción de brazo',
       angleMin: 15,
       angleMax: 90,
       tensionMin: 2.0,
@@ -1213,11 +1213,11 @@
     },
     {
       id: 17,
-      name: 'Aperturas Posteriores (Band Pull-Apart Avanzado)',
+      name: 'Aperturas posteriores (band pull-apart)',
       category: 'espalda',
-      target: 'Retracción Escapular y Deltoides Post.',
+      target: 'Retracción escapular y deltoides posterior',
       synergists: 'Trapecio, Manguito',
-      angleName: 'Apertura Escapular',
+      angleName: 'Apertura escapular',
       angleMin: 0,
       angleMax: 95,
       tensionMin: 3.0,
@@ -1228,11 +1228,11 @@
     },
     {
       id: 18,
-      name: 'Flexiones Resistidas con Banda (Push-Ups)',
+      name: 'Flexiones resistidas con banda (push-ups)',
       category: 'pecho',
-      target: 'Pectoral Mayor y Tríceps',
+      target: 'Pectoral mayor y tríceps',
       synergists: 'Serrato Anterior, Core',
-      angleName: 'Ángulo Codo',
+      angleName: 'Ángulo de codo',
       angleMin: 90,
       angleMax: 175,
       tensionMin: 5.0,
@@ -1296,11 +1296,11 @@
     },
     {
       id: 19,
-      name: 'Pullover Dorsal con Banda Anclada Alta',
+      name: 'Pullover dorsal con banda anclada alta',
       category: 'espalda',
-      target: 'Dorsal Ancho y Serrato',
+      target: 'Dorsal ancho y serrato anterior',
       synergists: 'Tríceps (Porción Larga), Pectoral menor',
-      angleName: 'Extensión Hombro',
+      angleName: 'Extensión de hombro',
       angleMin: 150,
       angleMax: 20,
       tensionMin: 3.5,
@@ -1362,11 +1362,11 @@
     },
     {
       id: 20,
-      name: 'Extensión de Tríceps Sobre la Cabeza',
+      name: 'Extensión de tríceps sobre la cabeza',
       category: 'brazos',
-      target: 'Tríceps Braquial (Porción Larga)',
+      target: 'Tríceps braquial (porción larga)',
       synergists: 'Ancóneo, Estabilizadores escapulares',
-      angleName: 'Extensión Codo',
+      angleName: 'Extensión de codo',
       angleMin: 65,
       angleMax: 175,
       tensionMin: 2.5,
@@ -1421,11 +1421,11 @@
     },
     {
       id: 21,
-      name: 'Curl Martillo con Rotación en Supinación',
+      name: 'Curl martillo con rotación en supinación',
       category: 'brazos',
-      target: 'Bíceps Braquial y Braquiorradial',
+      target: 'Bíceps braquial y braquiorradial',
       synergists: 'Braquial Anterior',
-      angleName: 'Flexión Codo',
+      angleName: 'Flexión de codo',
       angleMin: 170,
       angleMax: 50,
       tensionMin: 3.0,
@@ -1482,11 +1482,11 @@
     },
     {
       id: 22,
-      name: 'Monster Walk Lateral en Tobillos',
+      name: 'Monster walk lateral en tobillos',
       category: 'piernas',
-      target: 'Glúteo Medio (Palanca Distal)',
+      target: 'Glúteo medio (palanca distal)',
       synergists: 'Tensor de la Fascia Lata',
-      angleName: 'Abducción Tobillos',
+      angleName: 'Abducción de tobillos',
       angleMin: 10,
       angleMax: 40,
       tensionMin: 5.0,
@@ -1530,11 +1530,11 @@
     },
     {
       id: 23,
-      name: 'Rotación Externa de Hombro con Banda',
+      name: 'Rotación externa de hombro con banda',
       category: 'hombros',
-      target: 'Manguito Rotador (Infraespinoso)',
+      target: 'Manguito rotador (infraespinoso)',
       synergists: 'Redondo Menor, Deltoides Posterior',
-      angleName: 'Rotación Externa',
+      angleName: 'Rotación externa',
       angleMin: 0,
       angleMax: 70,
       tensionMin: 1.5,
@@ -1595,11 +1595,11 @@
     },
     {
       id: 24,
-      name: 'Flexión Plantar de Tobillo con Banda (Gemelos y Sóleo)',
+      name: 'Flexión plantar de tobillo con banda (gemelos y sóleo)',
       category: 'piernas',
-      target: 'Tríceps Sural (Gastrocnemio y Sóleo)',
+      target: 'Tríceps sural (gastrocnemio y sóleo)',
       synergists: 'Flexor largo de los dedos',
-      angleName: 'Flexión Plantar',
+      angleName: 'Flexión plantar',
       angleMin: 80,
       angleMax: 135,
       tensionMin: 4.0,
@@ -1674,13 +1674,13 @@
     const pctEl = document.getElementById(`${prefix}-pct`);
     const barEl = document.getElementById(`${prefix}-bar`);
 
-    if (targetEl) targetEl.textContent = `ZONA: ${ex.target.toUpperCase()}`;
-    if (angleEl) angleEl.textContent = `${ex.angleName.toUpperCase()}: ${angle}°`;
+    if (targetEl) targetEl.textContent = `Zona: ${ex.target}`;
+    if (angleEl) angleEl.textContent = `${ex.angleName}: ${angle}°`;
     if (phaseEl) {
-      phaseEl.textContent = phase.toUpperCase();
+      phaseEl.textContent = phase;
       phaseEl.style.color = phaseColor;
     }
-    if (tensionEl) tensionEl.textContent = `TENSIÓN: ${tension} kg`;
+    if (tensionEl) tensionEl.textContent = `Tensión: ${tension} kg`;
     if (pctEl) pctEl.textContent = `${actPct}%`;
     if (barEl) barEl.style.width = `${actPct}%`;
   }

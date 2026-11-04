@@ -2,8 +2,8 @@
 ATLAS BIOMECÁNICO: 24 EJERCICIOS (VÍDEO 60 FPS + PDF) + 11 MÓDULOS DE BIOMECÁNICA
 Directorio local: D:\Vídeo con gomas\
 Repositorio GitHub: https://github.com/elenabenitocases/Ejercicios-gomas
-Sitio Web en vivo:  https://elenabenitocases.github.io/Ejercicios-gomas/
-Portal Recursos:    https://elenabenitocases.github.io/Recursos-Educativos/
+Sitio web en vivo:  https://elenabenitocases.github.io/Ejercicios-gomas/
+Portal de recursos: https://elenabenitocases.github.io/Recursos-Educativos/
 ========================================================================
 
 Esta suite interactiva ofrece una experiencia dual completa en cada ejercicio:
@@ -13,10 +13,10 @@ Esta suite interactiva ofrece una experiencia dual completa en cada ejercicio:
 - Mapa de calor muscular incandescente (rojo en agonista activo, ámbar en sinergistas).
 - Vectores de tensión elástica cyan y eje de alineación postural verde esmeralda.
 - HUD en vivo con ángulo articular, fase del movimiento y porcentaje de activación.
-- Grabador de vídeo WebM a 60 FPS directo al ordenador (sin subir archivos pesados).
+- Grabador de vídeo WebM a 60 fps directo al ordenador (sin subir archivos pesados).
 
 2. LÁMINA TÉCNICA ANATÓMICA SVG CON MODAL DE ZOOM
-- Dibujo vectorial técnico de dos fases (Fase 1: Inicio y Anclaje / Fase 2: Ejecución).
+- Dibujo vectorial técnico de dos fases (fase 1: inicio y anclaje / fase 2: ejecución).
 
 3. FICHA TÉCNICA COMPLETA IMPRIMIBLE EN PDF
 - Botón individual en cada ejercicio para generar una ficha PDF de 1-2 páginas.
@@ -24,9 +24,10 @@ Esta suite interactiva ofrece una experiencia dual completa en cada ejercicio:
 
 4. 11 MÓDULOS DE BIOMECÁNICA, OSTEOPATÍA Y CONTROL MOTOR
 - Biomecánica articular (anteversión/retroversión, supinación/pronación, abducción/aducción, etc.).
-- Biotensegridad y osteopatía (fascia, cadenas lesionales, respiración y bracing 360°).
+- Biotensegridad y osteopatía (fascia, cadenas lesionales, respiración y bracing en 360°).
 - Control motor (propiocepción y mitos de tensión muscular).
 
 CÓMO ABRIR:
 - Haz doble clic en "Abrir_Videos.bat" para iniciar la suite en tu navegador.
 - Funciona 100% offline sin necesidad de conexión ni instalaciones previas.
+========================================================================
