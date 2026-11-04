@@ -1,0 +1,40 @@
+========================================================================
+SUITE BIOMECÁNICA: EJERCICIOS CON GOMAS ELÁSTICAS
+Directorio: D:\Vídeo con gomas\
+========================================================================
+
+¡Hola! En esta carpeta se encuentran alojadas las animaciones técnicas y
+el generador de vídeos para el fortalecimiento muscular con bandas elásticas.
+
+CONTENIDO DE ESTA CARPETA:
+------------------------------------------------------------------------
+1. index.html:
+   La aplicación principal con el reproductor interactivo de 6 ejercicios.
+   Permite ver la técnica en 60 FPS, analizar los ángulos articulares, la
+   activación muscular en tiempo real (mapa de calor) y la tensión elástica.
+
+2. Abrir_Videos.bat:
+   Acceso directo ejecutable. Al hacer doble clic sobre él, se abrirá la
+   suite inmediatamente en tu navegador web habitual (Edge, Chrome, etc.).
+
+3. Botón "Descargar Vídeo (.webm)":
+   Dentro de la aplicación, al pulsar este botón en cualquiera de los
+   ejercicios, se grabará automáticamente una repetición completa a 60 FPS
+   en bucle y se descargará directamente como archivo de vídeo a tu equipo.
+
+EJERCICIOS INCLUIDOS:
+------------------------------------------------------------------------
+1. Isquiotibiales: Curl Femoral Prono con Goma (Aislamiento flexión de rodilla)
+2. Glúteos y Abductores: Pasos Laterales con Miniband (Monster Walk)
+3. Espalda y Dorsales: Remo Horizontal con Goma
+4. Hombros y Deltoides: Elevaciones Laterales con Banda Elástica
+5. Cuádriceps: Sentadilla con Banda Elástica (Squat con tensión ascendente)
+6. Pectoral: Cruce / Aperturas de Pecho con Goma (Compresión en pico)
+
+CÓDIGO DE COLORES TÉCNICO:
+------------------------------------------------------------------------
+- ROJO INCANDESCENTE (#ef4444): Músculo agonista principal en máxima contracción.
+- ÁMBAR (#f59e0b): Músculos sinergistas y fijadores.
+- AZUL CIAN (#06b6d4): Banda elástica y vectores de fuerza de resistencia.
+- VERDE (#10b981): Estabilidad lumbar y alineación postural protegida.
+========================================================================

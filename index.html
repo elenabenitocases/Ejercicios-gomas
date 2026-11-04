@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suite Biomecánica: Ejercicios Técnicos con Gomas</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card: #0f172a;
+      --card-border: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #4f46e5;
+      --accent-red: #ef4444;
+      --accent-amber: #f59e0b;
+      --accent-cyan: #06b6d4;
+      --accent-emerald: #10b981;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      padding: 20px;
+      line-height: 1.5;
+    }
+    .hud-grid {
+      background-size: 20px 20px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    }
+    .container { max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+    
+    /* Header */
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 16px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-family: monospace;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      margin-bottom: 6px;
+    }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #34d399; }
+    h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
+    .subtitle { font-size: 13px; color: var(--text-muted); }
+
+    /* Barra de Navegación de Ejercicios */
+    .exercise-nav {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 8px;
+      background: #0b1120;
+      padding: 8px;
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+    }
+    .nav-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .nav-btn:hover { background: rgba(255, 255, 255, 0.05); color: #fff; }
+    .nav-btn.active {
+      background: #4338ca;
+      color: #fff;
+      border-color: #6366f1;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+    .nav-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.25);
+      font-size: 11px;
+    }
+
+    /* Layout principal */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    @media (min-width: 980px) {
+      .main-grid { grid-template-columns: 8fr 4fr; }
+    }
+
+    /* Visualizador / Canvas */
+    .player-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+    .canvas-viewport {
+      position: relative;
+      background: #020617;
+      aspect-ratio: 16 / 10;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-bottom: 1px solid var(--card-border);
+    }
+    canvas { width: 100%; height: 100%; display: block; }
+
+    /* HUD overlays */
+    .hud-tag {
+      position: absolute;
+      background: rgba(2, 6, 23, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(51, 65, 85, 0.7);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 11px;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hud-tl { top: 14px; left: 14px; }
+    .hud-tr { top: 14px; right: 14px; text-align: right; }
+    .hud-bl { bottom: 14px; left: 14px; width: 220px; }
+    .rec-badge {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #dc2626;
+      color: white;
+      font-family: monospace;
+      font-size: 11px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-weight: bold;
+      box-shadow: 0 0 20px rgba(220, 38, 38, 0.8);
+      display: none;
+    }
+
+    /* Controles de reproducción */
+    .controls-strip {
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: #0b1324;
+    }
+    .scrubber-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: monospace;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    input[type=range] {
+      flex: 1;
+      height: 6px;
+      accent-color: #6366f1;
+      cursor: pointer;
+    }
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn-group { display: flex; align-items: center; gap: 8px; }
+    
+    .btn-icon {
+      background: var(--primary);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-icon:hover { background: #4338ca; }
+    .btn-icon.secondary {
+      background: #1e293b;
+      color: var(--text-muted);
+    }
+    .btn-icon.secondary:hover { background: #334155; color: #fff; }
+
+    .speed-pills {
+      display: flex;
+      background: #1e293b;
+      border-radius: 8px;
+      padding: 3px;
+    }
+    .speed-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-family: monospace;
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .speed-btn.active {
+      background: #4f46e5;
+      color: white;
+      font-weight: bold;
+    }
+
+    .btn-record {
+      background: linear-gradient(135deg, #e11d48, #f59e0b);
+      border: none;
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(225, 29, 72, 0.4);
+      transition: transform 0.1s, opacity 0.2s;
+    }
+    .btn-record:active { transform: scale(0.97); }
+
+    /* Barra de activación */
+    .bar-track {
+      width: 100%;
+      height: 6px;
+      background: #1e293b;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #f59e0b, #ef4444);
+      width: 0%;
+      transition: width 0.05s linear;
+    }
+
+    /* Panel de Información Técnica */
+    .info-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .info-header { border-bottom: 1px solid var(--card-border); padding-bottom: 12px; }
+    .info-title { font-size: 17px; font-weight: 800; color: #fff; }
+    .info-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    .section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .muscle-list { list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 12px; }
+    .muscle-item { display: flex; align-items: flex-start; gap: 8px; }
+    .dot-lead { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+
+    .tempo-box {
+      background: #020617;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      text-align: center;
+      font-family: monospace;
+    }
+    .tempo-num { font-size: 14px; font-weight: 800; color: #818cf8; }
+    .tempo-desc { font-size: 10px; color: var(--text-muted); }
+
+    .cue-box {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: #6ee7b7;
+      display: flex;
+      gap: 8px;
+    }
+    .error-box {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: #fca5a5;
+      display: flex;
+      gap: 8px;
+    }
+
+    .legend-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 8px;
+      background: #0b1120;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 11px;
+    }
+    .legend-item { display: flex; align-items: center; gap: 8px; }
+    .legend-color { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Header Principal -->
+    <header>
+      <div>
+        <div class="badge">
+          <span class="badge-dot"></span>
+          DIRECTORIO LOCAL: D:\Vídeo con gomas
+        </div>
+        <h1>Suite de Biomecánica: Ejercicios Técnicos con Gomas</h1>
+        <p class="subtitle">Animaciones vectoriales anatómicas con iluminación de contracción muscular activa y vectores de fuerza</p>
+      </div>
+
+      <div style="font-size: 12px; color: var(--text-muted); text-align: right;">
+        <span>Resolución de vídeo: <strong>60 FPS nativo</strong></span><br>
+        <span>Generador de clips WebM integrado</span>
+      </div>
+    </header>
+
+    <!-- Selector de los 6 Grupos Musculares -->
+    <nav class="exercise-nav">
+      <button class="nav-btn active" onclick="switchExercise(0)" id="nav0">
+        <span class="nav-num">1</span>
+        <div><div>Isquiotibiales</div><small style="color:#64748b;">Curl Femoral Prono</small></div>
+      </button>
+      <button class="nav-btn" onclick="switchExercise(1)" id="nav1">
+        <span class="nav-num">2</span>
+        <div><div>Glúteos / Abductores</div><small style="color:#64748b;">Pasos con Miniband</small></div>
+      </button>
+      <button class="nav-btn" onclick="switchExercise(2)" id="nav2">
+        <span class="nav-num">3</span>
+        <div><div>Espalda / Dorsales</div><small style="color:#64748b;">Remo Horizontal</small></div>
+      </button>
+      <button class="nav-btn" onclick="switchExercise(3)" id="nav3">
+        <span class="nav-num">4</span>
+        <div><div>Hombros / Deltoides</div><small style="color:#64748b;">Elevaciones Laterales</small></div>
+      </button>
+      <button class="nav-btn" onclick="switchExercise(4)" id="nav4">
+        <span class="nav-num">5</span>
+        <div><div>Cuádriceps</div><small style="color:#64748b;">Sentadilla con Banda</small></div>
+      </button>
+      <button class="nav-btn" onclick="switchExercise(5)" id="nav5">
+        <span class="nav-num">6</span>
+        <div><div>Pectoral</div><small style="color:#64748b;">Aperturas / Press</small></div>
+      </button>
+    </nav>
+
+    <!-- Área de Trabajo Principal -->
+    <div class="main-grid">
+
+      <!-- Columna Izquierda: Reproductor de Vídeo Animado -->
+      <div class="player-card">
+        
+        <!-- Pantalla / Canvas -->
+        <div class="canvas-viewport hud-grid">
+          <canvas id="mainCanvas"></canvas>
+
+          <!-- Superposiciones HUD -->
+          <div class="hud-tag hud-tl">
+            <span style="width:8px; height:8px; border-radius:50%; background:var(--accent-red); box-shadow:0 0 6px var(--accent-red)"></span>
+            <span>MÚSCULO ACTIVO:</span>
+            <strong id="hudMuscle" style="color:#fca5a5;">ISQUIOTIBIALES</strong>
+          </div>
+
+          <div class="hud-tag hud-tr">
+            <div>
+              <div style="color:var(--text-muted); font-size:10px;">FASE BIOMECÁNICA:</div>
+              <strong id="hudPhase" style="color:var(--accent-amber);">CONCÉNTRICA</strong>
+            </div>
+          </div>
+
+          <div class="hud-tag hud-bl">
+            <div style="display:flex; justify-content:space-between; width:100%; font-size:10px;">
+              <span>Activación muscular:</span>
+              <strong id="hudPct" style="color:#fca5a5;">20%</strong>
+            </div>
+            <div class="bar-track">
+              <div id="hudFill" class="bar-fill"></div>
+            </div>
+          </div>
+
+          <div id="recBadge" class="rec-badge">
+            ● GRABANDO CLIP DE VÍDEO (60 FPS)...
+          </div>
+        </div>
+
+        <!-- Barra de Control del Vídeo -->
+        <div class="controls-strip">
+          <div class="scrubber-row">
+            <span id="timeCurrent">0:00</span>
+            <input type="range" id="timeScrubber" min="0" max="1000" value="0">
+            <span id="timeTotal">0:06</span>
+          </div>
+
+          <div class="btn-row">
+            <div class="btn-group">
+              <!-- Play / Pausa -->
+              <button class="btn-icon" id="btnPlay" onclick="togglePlay()" title="Reproducir / Pausar">
+                <svg id="iconPause" width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                <svg id="iconPlay" style="display:none;" width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+
+              <!-- Reiniciar -->
+              <button class="btn-icon secondary" onclick="resetVideo()" title="Reiniciar ejercicio">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              </button>
+
+              <!-- Velocidades -->
+              <div class="speed-pills">
+                <button class="speed-btn" onclick="setSpeed(0.5)" id="sp05">0.5x</button>
+                <button class="speed-btn active" onclick="setSpeed(1.0)" id="sp10">1.0x</button>
+                <button class="speed-btn" onclick="setSpeed(1.5)" id="sp15">1.5x</button>
+              </div>
+
+              <!-- Bucle -->
+              <button class="speed-btn active" style="margin-left:4px;" id="btnLoop" onclick="toggleLoop()">🔁 Bucle</button>
+            </div>
+
+            <!-- Botón Exportar Vídeo -->
+            <button class="btn-record" id="btnDownloadClip" onclick="recordClip()">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              <span>Descargar Vídeo (.webm)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Leyenda Anatómica -->
+        <div class="legend-bar">
+          <div class="legend-item">
+            <span class="legend-color" style="background:#ef4444; box-shadow:0 0 8px #ef4444;"></span>
+            <div><strong>Agonista Principal</strong><br><span style="color:#64748b;">Máxima contracción</span></div>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color" style="background:#f59e0b;"></span>
+            <div><strong>Sinergistas</strong><br><span style="color:#64748b;">Apoyo y fijación</span></div>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color" style="background:#06b6d4; box-shadow:0 0 6px #06b6d4;"></span>
+            <div><strong>Goma Elástica</strong><br><span style="color:#64748b;">Resistencia y vector</span></div>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color" style="background:#10b981;"></span>
+            <div><strong>Estabilidad Core</strong><br><span style="color:#64748b;">Postura protegida</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Columna Derecha: Tarjeta Técnica y Biomecánica -->
+      <div class="info-card">
+        <div class="info-header">
+          <span style="font-family:monospace; font-size:10px; color:#818cf8; text-transform:uppercase;">Protocolo Fisioterapéutico / Entrenamiento</span>
+          <h2 class="info-title" id="infoTitle">Curl Femoral Prono con Goma</h2>
+          <p class="info-sub" id="infoSubtitle">Enfoque: Flexión pura de rodilla sin compensación de la pelvis.</p>
+        </div>
+
+        <div>
+          <div class="section-title">Anatomía Clave</div>
+          <ul class="muscle-list" id="infoMuscles">
+            <!-- Rellenado dinámicamente -->
+          </ul>
+        </div>
+
+        <div>
+          <div class="section-title">Tempo de Repetición (Cadencia)</div>
+          <div class="tempo-box">
+            <div>
+              <div class="tempo-num" id="tempoCon">2s</div>
+              <div class="tempo-desc">Fase Concéntrica</div>
+            </div>
+            <div>
+              <div class="tempo-num" id="tempoIso" style="color:#ef4444;">1s</div>
+              <div class="tempo-desc">Pausa Isométrica</div>
+            </div>
+            <div>
+              <div class="tempo-num" id="tempoExc" style="color:#10b981;">3s</div>
+              <div class="tempo-desc">Fase Excéntrica</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-title">Indicaciones Técnicas</div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div class="cue-box" id="infoCue">
+              <span>✓</span>
+              <span id="cueText">Mantén la cadera firmemente apoyada en el suelo; aprieta el glúteo para bloquear la pelvis.</span>
+            </div>
+            <div class="error-box" id="infoError">
+              <span>✕</span>
+              <span id="errorText">Evita arquear la zona lumbar para intentar subir más el talón.</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:auto; padding-top:12px; border-top:1px solid var(--card-border); display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted);">
+          <span>Volumen recomendado:</span>
+          <strong style="color:#fff;" id="infoSets">3-4 series × 12-15 reps</strong>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    // Datos y especificaciones de los 6 ejercicios
+    const exercises = [
+      {
+        id: 0,
+        name: "Curl Femoral Prono con Goma",
+        target: "Isquiotibiales (Bíceps femoral, Semitendinoso, Semimembranoso)",
+        sub: "Aislamiento directo de la flexión de rodilla contra resistencia elástica continua.",
+        muscles: [
+          { name: "Isquiotibiales (Bíceps/Semis)", role: "Agonista", color: "#ef4444", desc: "Flexión activa de rodilla; máxima contracción al alcanzar los 70°." },
+          { name: "Gemelos (Gastrocnemio)", role: "Sinergista", color: "#f59e0b", desc: "Asisten en el primer tercio de la flexión de rodilla." },
+          { name: "Glúteos y Core", role: "Estabilizador", color: "#10b981", desc: "Fijan la pelvis contra el suelo evitando compensación lumbar." }
+        ],
+        cue: "Mantén la cadera y el pubis firmemente pegados a la colchoneta durante toda la flexión.",
+        error: "Arquear la espalda baja (hiperlordosis) para tirar de la goma.",
+        sets: "3-4 series × 12-15 reps (pausa 1s arriba)",
+        tempo: ["2s", "1s", "3s"]
+      },
+      {
+        id: 1,
+        name: "Pasos Laterales con Miniband (Monster Walk)",
+        target: "Glúteos y Abductores (Glúteo Medio, Menor y Tensor Fascia Lata)",
+        sub: "Activación del compartimento abductor y estabilizadores pélvicos en bipedestación.",
+        muscles: [
+          { name: "Glúteo Medio y Menor", role: "Agonista", color: "#ef4444", desc: "Abducción y rotación externa de cadera contra la goma." },
+          { name: "Glúteo Mayor y Cuádriceps", role: "Sinergista", color: "#f59e0b", desc: "Mantienen la flexión atlética de rodillas a 135°." },
+          { name: "Core y Oblicuos", role: "Estabilizador", color: "#10b981", desc: "Evitan el balanceo lateral del tronco al dar el paso." }
+        ],
+        cue: "Mantén siempre tensión en la banda; las rodillas nunca deben colapsar hacia adentro (valgo).",
+        error: "Juntar los pies completamente al dar el paso perdiendo la tensión elástica.",
+        sets: "3 series × 15-20 pasos por lado",
+        tempo: ["2s", "1s", "2s"]
+      },
+      {
+        id: 2,
+        name: "Remo Horizontal con Goma (Sentado / De pie)",
+        target: "Espalda Media y Dorsales (Dorsal Ancho, Romboides, Trapecio)",
+        sub: "Tracción horizontal con retracción escapular activa para densidad y postura dorsal.",
+        muscles: [
+          { name: "Dorsal Ancho y Romboides", role: "Agonista", color: "#ef4444", desc: "Extensión de hombro y retracción de escápulas hacia la columna." },
+          { name: "Bíceps Braquial", role: "Sinergista", color: "#f59e0b", desc: "Flexión del codo asistiendo en la tracción de la banda." },
+          { name: "Erectores Espinales y Core", role: "Estabilizador", color: "#10b981", desc: "Mantienen el torso erguido sin inclinarse hacia atrás." }
+        ],
+        cue: "Inicia el movimiento juntando las escápulas atrás y tirando de los codos hacia la cadera.",
+        error: "Encojer los hombros hacia las orejas usando el trapecio superior de forma excesiva.",
+        sets: "4 series × 12-15 reps",
+        tempo: ["2s", "1s", "3s"]
+      },
+      {
+        id: 3,
+        name: "Elevaciones Laterales con Banda Elástica",
+        target: "Hombros / Deltoides (Porción Lateral o Media)",
+        sub: "Aislamiento de la abducción del brazo en el plano escapular para anchura de hombros.",
+        muscles: [
+          { name: "Deltoides Lateral", role: "Agonista", color: "#ef4444", desc: "Abducción del brazo de 0° a 90° con máxima tensión de la goma arriba." },
+          { name: "Supraespinoso y Trapecio", role: "Sinergista", color: "#f59e0b", desc: "Inicio de la abducción y rotación escapular ascendente." },
+          { name: "Core y Glúteos", role: "Estabilizador", color: "#10b981", desc: "Fijan el cuerpo para evitar impulsos con el torso." }
+        ],
+        cue: "Eleva los codos guiando el movimiento con los meñiques ligeramente hacia arriba.",
+        error: "Pegar tirones de espalda o levantar los brazos por encima de los 90° pinzando el hombro.",
+        sets: "3-4 series × 15 reps",
+        tempo: ["2s", "1s", "3s"]
+      },
+      {
+        id: 4,
+        name: "Sentadilla con Banda Elástica (Squat)",
+        target: "Cuádriceps (Vasto Lateral, Vasto Medial, Recto Femoral)",
+        sub: "Extensión de rodilla con pico de resistencia elástica en los últimos 45° de recorrido.",
+        muscles: [
+          { name: "Cuádriceps Femoral", role: "Agonista", color: "#ef4444", desc: "Extensión potente de rodillas contra la tensión elástica que aumenta arriba." },
+          { name: "Glúteo Mayor", role: "Sinergista", color: "#f59e0b", desc: "Extensión de cadera sincronizada con las rodillas." },
+          { name: "Core y Abdominales", role: "Estabilizador", color: "#10b981", desc: "Mantienen el tórax erguido frente a la tracción hacia abajo de la goma." }
+        ],
+        cue: "Empuja el suelo con fuerza y bloquea las rodillas arriba apretando los cuádriceps.",
+        error: "Dejar que las rodillas se desplacen hacia dentro o despegar los talones.",
+        sets: "4 series × 12-15 reps",
+        tempo: ["3s", "1s", "2s"]
+      },
+      {
+        id: 5,
+        name: "Aperturas / Press de Pecho con Goma",
+        target: "Pectoral Mayor (Porción Esternal y Clavicular)",
+        sub: "Aducción horizontal del húmero con máxima tensión elástica en la línea media.",
+        muscles: [
+          { name: "Pectoral Mayor", role: "Agonista", color: "#ef4444", desc: "Aducción horizontal; compresión máxima cuando las manos se juntan al frente." },
+          { name: "Deltoides Anterior y Tríceps", role: "Sinergista", color: "#f59e0b", desc: "Flexión de hombro y empuje de brazos." },
+          { name: "Serrato Anterior y Core", role: "Estabilizador", color: "#10b981", desc: "Protracción escapular y anclaje del centro de gravedad." }
+        ],
+        cue: "Imagina que abrazas un barril ancho, juntando los bíceps contra el pecho al final.",
+        error: "Perder la retracción escapular al inicio o hiperextender los hombros en exceso hacia atrás.",
+        sets: "3-4 series × 12-15 reps",
+        tempo: ["2s", "1s", "3s"]
+      }
+    ];
+
+    let currentExId = 0;
+    let isPlaying = true;
+    let isLooping = true;
+    let speed = 1.0;
+    let progress = 0;
+    let lastTime = performance.now();
+    const cycleMs = 6000;
+
+    const canvas = document.getElementById('mainCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 2;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+    }
+
+    // Elementos DOM
+    const hudMuscle = document.getElementById('hudMuscle');
+    const hudPhase = document.getElementById('hudPhase');
+    const hudPct = document.getElementById('hudPct');
+    const hudFill = document.getElementById('hudFill');
+    const timeScrubber = document.getElementById('timeScrubber');
+    const timeCurrent = document.getElementById('timeCurrent');
+    const iconPlay = document.getElementById('iconPlay');
+    const iconPause = document.getElementById('iconPause');
+
+    function switchExercise(id) {
+      currentExId = id;
+      progress = 0;
+      timeScrubber.value = 0;
+
+      // Actualizar tabs
+      document.querySelectorAll('.nav-btn').forEach((btn, idx) => {
+        btn.classList.toggle('active', idx === id);
+      });
+
+      // Actualizar ficha técnica
+      const ex = exercises[id];
+      document.getElementById('infoTitle').textContent = ex.name;
+      document.getElementById('infoSubtitle').textContent = ex.sub;
+      hudMuscle.textContent = ex.target.split(' ')[0].toUpperCase();
+
+      const muscleList = document.getElementById('infoMuscles');
+      muscleList.innerHTML = ex.muscles.map(m => `
+        <li class="muscle-item">
+          <span class="dot-lead" style="background:${m.color}; box-shadow:0 0 6px ${m.color}"></span>
+          <div>
+            <strong style="color:#fff;">${m.name}:</strong> 
+            <span style="color:#94a3b8;">${m.desc}</span>
+          </div>
+        </li>
+      `).join('');
+
+      document.getElementById('cueText').textContent = ex.cue;
+      document.getElementById('errorText').textContent = ex.error;
+      document.getElementById('infoSets').textContent = ex.sets;
+      document.getElementById('tempoCon').textContent = ex.tempo[0];
+      document.getElementById('tempoIso').textContent = ex.tempo[1];
+      document.getElementById('tempoExc').textContent = ex.tempo[2];
+
+      if (!isPlaying) togglePlay();
+    }
+
+    function togglePlay() {
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        iconPlay.style.display = 'none';
+        iconPause.style.display = 'block';
+        lastTime = performance.now();
+      } else {
+        iconPlay.style.display = 'block';
+        iconPause.style.display = 'none';
+      }
+    }
+
+    function resetVideo() {
+      progress = 0;
+      timeScrubber.value = 0;
+      if (!isPlaying) togglePlay();
+    }
+
+    function setSpeed(s) {
+      speed = s;
+      document.getElementById('sp05').classList.toggle('active', s === 0.5);
+      document.getElementById('sp10').classList.toggle('active', s === 1.0);
+      document.getElementById('sp15').classList.toggle('active', s === 1.5);
+    }
+
+    function toggleLoop() {
+      isLooping = !isLooping;
+      document.getElementById('btnLoop').classList.toggle('active', isLooping);
+    }
+
+    timeScrubber.addEventListener('input', e => {
+      progress = parseFloat(e.target.value) / 1000;
+    });
+
+    // Kinematics Helper: tempo 2s conc, 1s iso, 3s exc
+    function calcT(p) {
+      let tNorm = 0;
+      let phase = "CONCÉNTRICA";
+      let phaseColor = "#f59e0b";
+
+      if (p <= 0.333) {
+        const t = p / 0.333;
+        tNorm = t * t * (3 - 2 * t);
+        phase = "FASE CONCÉNTRICA";
+        phaseColor = "#f59e0b";
+      } else if (p <= 0.50) {
+        tNorm = 1.0;
+        phase = "PAUSA ISOMÉTRICA (PICO)";
+        phaseColor = "#ef4444";
+      } else {
+        const t = (p - 0.50) / 0.50;
+        tNorm = 1.0 - (t * t * (3 - 2 * t));
+        phase = "FASE EXCÉNTRICA (CONTROLADA)";
+        phaseColor = "#10b981";
+      }
+      return { tNorm, phase, phaseColor };
+    }
+
+    // --- RENDERIZADORES DE CADA EJERCICIO ---
+
+    // 0: Curl Femoral Prono
+    function renderHamstrings(w, h, tNorm) {
+      const groundY = h * 0.76;
+      const anchorX = w * 0.88;
+      const anchorY = groundY - 4;
+
+      // Colchoneta
+      ctx.fillStyle = "#1e293b";
+      ctx.beginPath();
+      ctx.roundRect(w * 0.14, groundY - 2, w * 0.74, 12, 3);
+      ctx.fill();
+
+      // Poste anclaje
+      ctx.fillStyle = "#475569";
+      ctx.beginPath();
+      ctx.roundRect(anchorX - 6, groundY - 45, 12, 50, 3);
+      ctx.fill();
+
+      const headX = w * 0.26;
+      const headY = groundY - 14;
+      const hipX = w * 0.50;
+      const hipY = groundY - 14;
+      const kneeX = w * 0.67;
+      const kneeY = groundY - 12;
+
+      const tibiaLen = w * 0.15;
+      const angleRad = 0.08 + tNorm * 1.85;
+      const ankleX = kneeX - Math.cos(angleRad) * tibiaLen;
+      const ankleY = kneeY - Math.sin(angleRad) * tibiaLen;
+
+      // Banda elástica
+      ctx.save();
+      ctx.strokeStyle = "#06b6d4";
+      ctx.lineWidth = 6 - tNorm * 1.8;
+      ctx.lineCap = "round";
+      ctx.shadowColor = "rgba(6, 182, 212, 0.8)";
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      const sag = (1 - tNorm) * 10;
+      ctx.moveTo(anchorX - 8, anchorY);
+      ctx.quadraticCurveTo((anchorX + ankleX)/2, (anchorY + ankleY)/2 + sag, ankleX, ankleY);
+      ctx.stroke();
+      ctx.restore();
+
+      // Torso y cabeza
+      ctx.fillStyle = "#334155";
+      ctx.beginPath();
+      ctx.arc(headX, headY, 14, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#1e293b";
+      ctx.strokeStyle = "#475569";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(headX + 10, headY);
+      ctx.lineTo(hipX, hipY - 12);
+      ctx.lineTo(hipX, hipY + 8);
+      ctx.lineTo(headX + 10, headY + 10);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Glúteo
+      ctx.fillStyle = `rgba(245, 158, 11, ${0.3 + tNorm * 0.35})`;
+      ctx.beginPath();
+      ctx.ellipse(hipX - 2, hipY - 4, 16, 12, -0.2, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Pierna base de apoyo
+      ctx.strokeStyle = "#334155";
+      ctx.lineWidth = 7;
+      ctx.beginPath();
+      ctx.moveTo(hipX, hipY);
+      ctx.lineTo(kneeX + 3, kneeY);
+      ctx.lineTo(anchorX - 22, groundY - 2);
+      ctx.stroke();
+
+      // Fémur
+      ctx.strokeStyle = "#64748b";
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.moveTo(hipX, hipY);
+      ctx.lineTo(kneeX, kneeY);
+      ctx.stroke();
+
+      // ISQUIOTIBIALES (Rojo incandescente / activación progresiva)
+      ctx.save();
+      const thick = 11 + tNorm * 10;
+      ctx.shadowColor = `rgba(239, 68, 68, ${0.4 + tNorm * 0.6})`;
+      ctx.shadowBlur = 8 + tNorm * 18;
+      const grad = ctx.createLinearGradient(hipX, hipY, kneeX, kneeY);
+      grad.addColorStop(0, '#f43f5e');
+      grad.addColorStop(0.5, '#fb923c');
+      grad.addColorStop(1, '#ef4444');
+      ctx.fillStyle = grad;
+
+      ctx.beginPath();
+      const midX = (hipX + kneeX)/2;
+      const midY = (hipY + kneeY)/2 - thick;
+      ctx.moveTo(hipX + 2, hipY - 4);
+      ctx.quadraticCurveTo(midX, midY, kneeX - 2, kneeY - 6);
+      ctx.lineTo(kneeX, kneeY + 2);
+      ctx.lineTo(hipX, hipY + 2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+
+      // Rodilla
+      ctx.fillStyle = "#94a3b8";
+      ctx.beginPath();
+      ctx.arc(kneeX, kneeY, 6, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Tibia y gemelo
+      ctx.strokeStyle = "#64748b";
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.moveTo(kneeX, kneeY);
+      ctx.lineTo(ankleX, ankleY);
+      ctx.stroke();
+
+      // Gemelo activo
+      ctx.fillStyle = `rgba(245, 158, 11, ${0.25 + tNorm * 0.3})`;
+      ctx.beginPath();
+      const perp = angleRad + Math.PI/2;
+      const midTX = (kneeX + ankleX)/2 + Math.cos(perp)*8;
+      const midTY = (kneeY + ankleY)/2 + Math.sin(perp)*8;
+      ctx.moveTo(kneeX, kneeY);
+      ctx.quadraticCurveTo(midTX, midTY, ankleX, ankleY);
+      ctx.closePath();
+      ctx.fill();
+
+      // Pie
+      ctx.strokeStyle = "#94a3b8";
+      ctx.lineWidth = 6;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(ankleX, ankleY);
+      const footAng = angleRad - 0.7;
+      ctx.lineTo(ankleX - Math.cos(footAng)*24, ankleY - Math.sin(footAng)*24);
+      ctx.stroke();
+
+      // Etiqueta anatómica
+      ctx.fillStyle = "#fda4af";
+      ctx.font = "bold 11px system-ui";
+      ctx.fillText("ISQUIOTIBIALES (BÍCEPS FEMORAL)", midX - 80, midY - 14);
+    }
+
+    // 1: Monster Walk / Glúteos y Abductores
+    function renderGlutes(w, h, tNorm) {
+      const groundY = h * 0.84;
+      const centerX = w * 0.50;
+
+      // Suelo
+      ctx.strokeStyle = "rgba(51, 65, 85, 0.4)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(w * 0.1, groundY + 4);
+      ctx.lineTo(w * 0.9, groundY + 4);
+      ctx.stroke();
+
+      // Posición atlética (vista frontal / 3/4)
+      const headX = centerX;
+      const headY = h * 0.22;
+      const chestY = h * 0.35;
+      const hipY = h * 0.48;
+
+      // Abducción de piernas: pierna izquierda fija, pierna derecha se separa
+      const leftFootX = centerX - 60;
+      const rightFootX = centerX + 40 + tNorm * 80; // se abre hacia la derecha
+
+      const leftKneeX = centerX - 45;
+      const rightKneeX = centerX + 25 + tNorm * 60;
+      const kneeY = h * 0.66;
+
+      // Miniband en rodillas/espinillas
+      ctx.save();
+      ctx.strokeStyle = "#06b6d4";
+      ctx.lineWidth = 7 - tNorm * 2;
+      ctx.shadowColor = "rgba(6, 182, 212, 0.8)";
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      ctx.moveTo(leftKneeX, kneeY + 12);
+      ctx.lineTo(rightKneeX, kneeY + 12);
+      ctx.stroke();
+      ctx.restore();
+
+      // Cabeza y tronco erguido
+      ctx.fillStyle = "#475569";
+      ctx.beginPath();
+      ctx.arc(headX, headY, 15, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Torso
+      ctx.fillStyle = "#1e293b";
+      ctx.strokeStyle = "#475569";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(centerX - 24, chestY);
+      ctx.lineTo(centerX + 24, chestY);
+      ctx.lineTo(centerX + 20, hipY);
+      ctx.lineTo(centerX - 20, hipY);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // --- GLÚTEO MEDIO / ABDUCTORES (Laterales de la pelvis) ---
+      // Se iluminan con gran intensidad en el lado que abduce
+      ctx.save();
+      ctx.shadowColor = `rgba(239, 68, 68, ${0.4 + tNorm * 0.6})`;
+      ctx.shadowBlur = 10 + tNorm * 16;
+      ctx.fillStyle = `rgb(239, ${Math.round(68 + (1 - tNorm)*60)}, 68)`;
+
+      // Glúteo medio derecho (lado activo)
+      ctx.beginPath();
+      ctx.ellipse(centerX + 22, hipY + 4, 18, 14, 0.3, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Glúteo medio izquierdo (fijador)
+      ctx.fillStyle = "rgba(245, 158, 11, 0.7)";
+      ctx.beginPath();
+      ctx.ellipse(centerX - 22, hipY + 4, 16, 13, -0.3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // Piernas
+      ctx.strokeStyle = "#64748b";
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      // Pierna izquierda
+      ctx.moveTo(centerX - 16, hipY + 8);
+      ctx.lineTo(leftKneeX, kneeY);
+      ctx.lineTo(leftFootX, groundY);
+      // Pierna derecha (activa)
+      ctx.moveTo(centerX + 16, hipY + 8);
+      ctx.lineTo(rightKneeX, kneeY);
+      ctx.lineTo(rightFootX, groundY);
+      ctx.stroke();
+
+      // Pies
+      ctx.fillStyle = "#334155";
+      ctx.beginPath();
+      ctx.roundRect(leftFootX - 12, groundY - 4, 28, 10, 3);
+      ctx.roundRect(rightFootX - 12, groundY - 4, 28, 10, 3);
+      ctx.fill();
+
+      // Vector de fuerza abductor
+      if (tNorm > 0.2) {
+        ctx.strokeStyle = "#06b6d4";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(rightKneeX + 14, kneeY + 12);
+        ctx.lineTo(rightKneeX + 38, kneeY + 12);
+        ctx.stroke();
+      }
+
+      ctx.fillStyle = "#fda4af";
+      ctx.font = "bold 11px system-ui";
+      ctx.fillText("GLÚTEO MEDIO / MENOR (ABDUCCIÓN)", centerX + 45, hipY - 6);
+    }
+
+    // 2: Remo Horizontal / Espalda y Dorsales
+    function renderBack(w, h, tNorm) {
+      const groundY = h * 0.82;
+      const hipX = w * 0.34;
+      const hipY = groundY - 24;
+
+      // Suelo
+      ctx.strokeStyle = "rgba(51, 65, 85, 0.4)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(w * 0.1, groundY + 4);
+      ctx.lineTo(w * 0.9, groundY + 4);
+      ctx.stroke();
+
+      // Anclaje frontal de la goma
+      const anchorX = w * 0.86;
+      const anchorY = groundY - 70;
+      ctx.fillStyle = "#475569";
+      ctx.beginPath();
+      ctx.roundRect(anchorX - 6, groundY - 110, 12, 120, 3);
+      ctx.fill();
+
+      // Posición sentada con piernas semi-extendidas hacia el anclaje
+      const feetX = w * 0.68;
+      const feetY = groundY - 4;
+
+      // Piernas estiradas al frente
+      ctx.strokeStyle = "#475569";
+      ctx.lineWidth = 7;
+      ctx.beginPath();
+      ctx.moveTo(hipX, hipY);
+      ctx.lineTo(w * 0.52, groundY - 8);
+      ctx.lineTo(feetX, feetY);
+      ctx.stroke();
+
+      // Tronco erguido
+      const shoulderX = hipX + 8;
+      const shoulderY = hipY - h * 0.32;
+      const headX = shoulderX + 2;
+      const headY = shoulderY - 26;
+
+      // Movimiento de codos:
+      // tNorm = 0: brazos estirados hacia la goma al frente
+      // tNorm = 1: codos tirados hacia atrás pegados a los costados
+      const elbowX = shoulderX + (1 - tNorm) * (w * 0.18) - tNorm * 22;
+      const elbowY = shoulderY + 24;
+
+      const handX = elbowX + (1 - tNorm) * (w * 0.16) + tNorm * 18;
+      const handY = shoulderY + 22;
+
+      // Banda elástica desde anclaje a las manos
+      ctx.save();
+      ctx.strokeStyle = "#06b6d4";
+      ctx.lineWidth = 6 - tNorm * 1.8;
+      ctx.shadowColor = "rgba(6, 182, 212, 0.8)";
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      ctx.moveTo(anchorX, anchorY);
+      ctx.lineTo(handX, handY);
+      ctx.stroke();
+      ctx.restore();
+
+      // Tronco
+      ctx.fillStyle = "#1e293b";
+      ctx.strokeStyle = "#475569";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(hipX - 12, hipY);
+      ctx.lineTo(shoulderX - 10, shoulderY);
+      ctx.lineTo(shoulderX + 16, shoulderY);
+      ctx.lineTo(hipX + 14, hipY);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // --- MÚSCULO AGONISTA: DORSAL ANCHO Y ROMBOIDES ---
+      ctx.save();
+      ctx.shadowColor = `rgba(239, 68, 68, ${0.4 + tNorm * 0.6})`;
+      ctx.shadowBlur = 10 + tNorm * 16;
+      ctx.fillStyle = `rgb(239, ${Math.round(68 + (1 - tNorm)*60)}, 68)`;
+
+      // Masa del dorsal ancho a lo largo de la espalda
+      ctx.beginPath();
+      ctx.moveTo(shoulderX - 8, shoulderY + 10);
+      ctx.quadraticCurveTo(shoulderX - 16 - tNorm * 8, (shoulderY + hipY)/2, hipX - 6, hipY - 6);
+      ctx.lineTo(hipX + 6, hipY - 6);
+      ctx.quadraticCurveTo(shoulderX + 6, (shoulderY + hipY)/2, shoulderX + 4, shoulderY + 10);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+
+      // Brazos
+      ctx.strokeStyle = "#94a3b8";
+      ctx.lineWidth = 6;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(shoulderX, shoulderY);
+      ctx.lineTo(elbowX, elbowY);
+      ctx.lineTo(handX, handY);
+      ctx.stroke();
+
+      // Cabeza
+      ctx.fillStyle = "#475569";
+      ctx.beginPath();
+      ctx.arc(headX, headY, 15, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#fda4af";
+      ctx.font = "bold 11px system-ui";
+      ctx.fillText("DORSAL ANCHO & ROMBOIDES", shoulderX - 140, shoulderY + 30);
+    }
+
+    // 3: Elevaciones Laterales / Hombros
+    function renderShoulders(w, h, tNorm) {
+      const groundY = h * 0.86;
+      const centerX = w * 0.50;
+
+      // Suelo
+      ctx.strokeStyle = "rgba(51, 65, 85, 0.4)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(w * 0.1, groundY + 4);
+      ctx.lineTo(w * 0.9, groundY + 4);
+      ctx.stroke();
+
+      const feetX1 = centerX - 25;
+      const feetX2 = centerX + 25;
+
+      const hipY = h * 0.52;
+      const shoulderY = h * 0.32;
+      const headY = h * 0.18;
+
+      // Brazos elevándose de 0° (vertical) a 90° (horizontal)
+      const armLen = w * 0.19;
+      const angle = 0.15 + tNorm * 1.45; // rad
+      const leftHandX = centerX - 30 - Math.sin(angle) * armLen;
+      const leftHandY = shoulderY + Math.cos(angle) * armLen;
+
+      const rightHandX = centerX + 30 + Math.sin(angle) * armLen;
+      const rightHandY = shoulderY + Math.cos(angle) * armLen;
+
+      // Goma elástica pisada bajo los pies y sujetada por las manos
+      ctx.save();
+      ctx.strokeStyle = "#06b6d4";
+      ctx.lineWidth = 5.5 - tNorm * 1.5;
+      ctx.shadowColor = "rgba(6, 182, 212, 0.8)";
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      // Lado izquierdo
+      ctx.moveTo(feetX1, groundY);
+      ctx.lineTo(leftHandX, leftHandY);
+      // Lado derecho
+      ctx.moveTo(feetX2, groundY);
+      ctx.lineTo(rightHandX, rightHandY);
+      ctx.stroke();
+      ctx.restore();
+
+      // Piernas y torso
+      ctx.strokeStyle = "#475569";
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.moveTo(feetX1, groundY);
+      ctx.lineTo(centerX - 16, hipY);
+      ctx.lineTo(centerX + 16, hipY);
+      ctx.lineTo(feetX2, groundY);
+      ctx.stroke();
+
+      ctx.fillStyle = "#1e293b";
+      ctx.strokeStyle = "#475569";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(centerX - 18, hipY);
+      ctx.lineTo(centerX - 24, shoulderY);
+      ctx.lineTo(centerX + 24, shoulderY);
+      ctx.lineTo(centerX + 18, hipY);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Brazos
+      ctx.strokeStyle = "#94a3b8";
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.moveTo(centerX - 24, shoulderY);
+      ctx.lineTo(leftHandX, leftHandY);
+      ctx.moveTo(centerX + 24, shoulderY);
+      ctx.lineTo(rightHandX, rightHandY);
+      ctx.stroke();
+
+      // --- MÚSCULO AGONISTA: DELTOIDES LATERAL ---
+      ctx.save();
+      ctx.shadowColor = `rgba(239, 68, 68, ${0.4 + tNorm * 0.6})`;
+      ctx.shadowBlur = 10 + tNorm * 16;
+      ctx.fillStyle = `rgb(239, ${Math.round(68 + (1 - tNorm)*60)}, 68)`;
+
+      // Deltoides izquierdo y derecho
+      ctx.beginPath();
+      ctx.arc(centerX - 26, shoulderY + 2, 12, 0, Math.PI * 2);
+      ctx.arc(centerX + 26, shoulderY + 2, 12, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // Cabeza
+      ctx.fillStyle = "#475569";
+      ctx.beginPath();
+      ctx.arc(centerX, headY, 15, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#fda4af";
+      ctx.font = "bold 11px system-ui";
+      ctx.fillText("DELTOIDES LATERAL (MÁXIMA TENSIÓN A 90°)", centerX + 40, shoulderY - 14);
+    }
+
+    // 4: Sentadilla / Cuádriceps
+    function renderSquat(w, h, tNorm) {
+      const groundY = h * 0.86;
+      const centerX = w * 0.50;
+
+      ctx.strokeStyle = "rgba(51, 65, 85, 0.4)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(w * 0.1, groundY + 4);
+      ctx.lineTo(w * 0.9, groundY + 4);
+      ctx.stroke();
+
+      // Cinemática sentadilla:
+      // tNorm = 0: posición baja (90° rodilla, cadera atrás)
+      // tNorm = 1: de pie (bloqueo y contracción de cuádriceps contra la máxima resistencia)
+      const footX = centerX;
+      const kneeX = centerX - 35 + tNorm * 10;
+      const kneeY = groundY - 30 - tNorm * 80;
+
+      const hipX = centerX - 70 + tNorm * 50;
+      const hipY = kneeY - 15 - tNorm * 90;
+
+      const shoulderX = hipX + 20 + tNorm * 10;
+      const shoulderY = hipY - 75;
+      const headY = shoulderY - 24;
+
+      // Banda elástica: pisada en pies y rodeando hombros/manos
+      ctx.save();
+      ctx.strokeStyle = "#06b6d4";
+      ctx.lineWidth = 5 + tNorm * 2;
+      ctx.shadowColor = "rgba(6, 182, 212, 0.8)";
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      ctx.moveTo(footX, groundY);
+      ctx.lineTo(shoulderX, shoulderY + 10);
+      ctx.stroke();
+      ctx.restore();
+
+      // Fémur
+      ctx.strokeStyle = "#64748b";
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.moveTo(hipX, hipY);
+      ctx.lineTo(kneeX, kneeY);
+      ctx.stroke();
+
+      // --- MÚSCULO AGONISTA: CUÁDRICEPS (Vasto medial/lateral/recto femoral) ---
+      // Cara anterior del muslo
+      ctx.save();
+      ctx.shadowColor = `rgba(239, 68, 68, ${0.4 + tNorm * 0.6})`;
+      ctx.shadowBlur = 10 + tNorm * 18;
+      ctx.fillStyle = `rgb(239, ${Math.round(68 + (1 - tNorm)*60)}, 68)`;
+
+      ctx.beginPath();
+      const midX = (hipX + kneeX)/2 + 10;
+      const midY = (hipY + kneeY)/2 - 12;
+      ctx.moveTo(hipX, hipY);
+      ctx.quadraticCurveTo(midX + tNorm * 6, midY - tNorm * 6, kneeX, kneeY);
+      ctx.lineTo(kneeX - 4, kneeY + 4);
+      ctx.lineTo(hipX - 4, hipY + 4);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+
+      // Tibia
+      ctx.strokeStyle = "#64748b";
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.moveTo(kneeX, kneeY);
+      ctx.lineTo(footX, groundY);
+      ctx.stroke();
+
+      // Tronco
+      ctx.fillStyle = "#1e293b";
+      ctx.strokeStyle = "#475569";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(hipX, hipY);
+      ctx.lineTo(shoulderX, shoulderY);
+      ctx.stroke();
+
+      // Cabeza
+      ctx.fillStyle = "#475569";
+      ctx.beginPath();
+      ctx.arc(shoulderX, headY, 15, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#fda4af";
+      ctx.font = "bold 11px system-ui";
+      ctx.fillText("CUÁDRICEPS (VASTO MEDIAL & LATERAL)", midX + 15, midY - 10);
+    }
+
+    // 5: Pectoral / Cruces o Press con goma
+    function renderChest(w, h, tNorm) {
+      const groundY = h * 0.86;
+      const centerX = w * 0.46;
+
+      ctx.strokeStyle = "rgba(51, 65, 85, 0.4)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(w * 0.1, groundY + 4);
+      ctx.lineTo(w * 0.9, groundY + 4);
+      ctx.stroke();
+
+      // Anclaje posterior de la goma
+      const anchorX = w * 0.16;
+      const anchorY = groundY - 140;
+      ctx.fillStyle = "#475569";
+      ctx.beginPath();
+      ctx.roundRect(anchorX - 6, groundY - 160, 12, 170, 3);
+      ctx.fill();
+
+      // Bipedestación con paso adelantado
+      const hipY = groundY - 90;
+      const shoulderX = centerX + 10;
+      const shoulderY = groundY - 150;
+      const headY = shoulderY - 26;
+
+      // Movimiento de brazos:
+      // tNorm = 0: brazos abiertos hacia atrás (estiramiento pectoral)
+      // tNorm = 1: manos juntas al frente (máxima contracción y compresión del pectoral)
+      const handX = shoulderX + 20 + tNorm * 65;
+      const handY = shoulderY + 10 - tNorm * 10;
+
+      // Goma elástica desde el anclaje trasero hacia las manos
+      ctx.save();
+      ctx.strokeStyle = "#06b6d4";
+      ctx.lineWidth = 5.5 - tNorm * 1.5;
+      ctx.shadowColor = "rgba(6, 182, 212, 0.8)";
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      ctx.moveTo(anchorX, anchorY);
+      ctx.lineTo(handX - 8, handY);
+      ctx.stroke();
+      ctx.restore();
+
+      // Piernas en paso tijera estable
+      ctx.strokeStyle = "#475569";
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.moveTo(centerX - 35, groundY);
+      ctx.lineTo(centerX - 10, hipY);
+      ctx.lineTo(centerX + 35, groundY);
+      ctx.stroke();
+
+      // Torso
+      ctx.fillStyle = "#1e293b";
+      ctx.strokeStyle = "#475569";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(centerX - 12, hipY);
+      ctx.lineTo(shoulderX - 8, shoulderY);
+      ctx.lineTo(shoulderX + 18, shoulderY);
+      ctx.lineTo(centerX + 12, hipY);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // --- MÚSCULO AGONISTA: PECTORAL MAYOR ---
+      ctx.save();
+      ctx.shadowColor = `rgba(239, 68, 68, ${0.4 + tNorm * 0.6})`;
+      ctx.shadowBlur = 10 + tNorm * 16;
+      ctx.fillStyle = `rgb(239, ${Math.round(68 + (1 - tNorm)*60)}, 68)`;
+
+      ctx.beginPath();
+      ctx.ellipse(shoulderX + 10, shoulderY + 16, 14 + tNorm * 4, 18, 0.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // Brazos empujando hacia adelante
+      ctx.strokeStyle = "#94a3b8";
+      ctx.lineWidth = 6;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(shoulderX, shoulderY);
+      ctx.lineTo(shoulderX + 24, shoulderY + 18);
+      ctx.lineTo(handX, handY);
+      ctx.stroke();
+
+      // Cabeza
+      ctx.fillStyle = "#475569";
+      ctx.beginPath();
+      ctx.arc(shoulderX - 2, headY, 15, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#fda4af";
+      ctx.font = "bold 11px system-ui";
+      ctx.fillText("PECTORAL MAYOR (CONTRACCIÓN EN PICO)", shoulderX - 10, shoulderY - 14);
+    }
+
+    // --- BUCLE PRINCIPAL DE ANIMACIÓN ---
+    function animLoop(currentTime) {
+      const dt = currentTime - lastTime;
+      lastTime = currentTime;
+
+      if (isPlaying) {
+        progress += (dt * speed) / cycleMs;
+        if (progress >= 1.0) {
+          if (isLooping) {
+            progress = progress % 1.0;
+          } else {
+            progress = 1.0;
+            togglePlay();
+          }
+        }
+        timeScrubber.value = Math.round(progress * 1000);
+      }
+
+      // Tiempo numérico
+      const sec = (progress * 6).toFixed(1);
+      timeCurrent.textContent = `0:0${Math.floor(sec)}`;
+
+      // Kinemática
+      const { tNorm, phase, phaseColor } = calcT(progress);
+      hudPhase.textContent = phase;
+      hudPhase.style.color = phaseColor;
+
+      const actPct = Math.round(20 + tNorm * 80);
+      hudPct.textContent = actPct + "%";
+      hudFill.style.width = actPct + "%";
+
+      // Limpiar lienzo
+      const rect = canvas.getBoundingClientRect();
+      ctx.clearRect(0, 0, rect.width, rect.height);
+
+      // Renderizar el ejercicio seleccionado
+      if (currentExId === 0) renderHamstrings(rect.width, rect.height, tNorm);
+      else if (currentExId === 1) renderGlutes(rect.width, rect.height, tNorm);
+      else if (currentExId === 2) renderBack(rect.width, rect.height, tNorm);
+      else if (currentExId === 3) renderShoulders(rect.width, rect.height, tNorm);
+      else if (currentExId === 4) renderSquat(rect.width, rect.height, tNorm);
+      else if (currentExId === 5) renderChest(rect.width, rect.height, tNorm);
+
+      requestAnimationFrame(animLoop);
+    }
+
+    // --- GRABADOR DE VÍDEO CONVERSOR WEBM ---
+    function recordClip() {
+      if (!canvas.captureStream) {
+        alert("Tu navegador no soporta captura de canvas.");
+        return;
+      }
+      const badge = document.getElementById('recBadge');
+      const btn = document.getElementById('btnDownloadClip');
+
+      // Empezar desde el segundo 0
+      progress = 0;
+      if (!isPlaying) togglePlay();
+
+      const stream = canvas.captureStream(60);
+      let chunks = [];
+      let rec;
+      try {
+        rec = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9' });
+      } catch(e) {
+        rec = new MediaRecorder(stream, { mimeType: 'video/webm' });
+      }
+
+      rec.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+      rec.onstop = () => {
+        const blob = new Blob(chunks, { type: 'video/webm' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const slug = exercises[currentExId].name.toLowerCase().replace(/[^a-z0-9]/g, '_');
+        a.download = `${slug}.webm`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        badge.style.display = 'none';
+        btn.innerHTML = `<span>✓ Vídeo Descargado!</span>`;
+        setTimeout(() => {
+          btn.innerHTML = `
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            <span>Descargar Vídeo (.webm)</span>
+          `;
+        }, 3000);
+      };
+
+      rec.start();
+      badge.style.display = 'block';
+      btn.innerHTML = `<span>● Grabando repetición...</span>`;
+
+      // Grabar 1 repetición exacta (6.1 segundos)
+      setTimeout(() => {
+        if (rec && rec.state === 'recording') rec.stop();
+      }, 6100);
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('DOMContentLoaded', () => {
+      switchExercise(0);
+      resizeCanvas();
+      lastTime = performance.now();
+      requestAnimationFrame(animLoop);
+    });
+    switchExercise(0);
+    resizeCanvas();
+    requestAnimationFrame(animLoop);
+  </script>
+</body>
+</html>

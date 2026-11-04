@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biomecánica con Gomas: Fortalecimiento de Isquiotibiales</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 0.8; filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.7)); }
+      50% { opacity: 1; filter: drop-shadow(0 0 16px rgba(249, 115, 22, 0.9)); }
+    }
+    .hud-grid {
+      background-size: 24px 24px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    }
+  </style>
+</head>
+<body class="bg-[#0b0f19] text-slate-100 min-h-screen p-4 md:p-8 font-sans antialiased">
+  <div class="max-w-6xl mx-auto space-y-6">
+
+    <!-- Header técnico -->
+    <header class="border-b border-slate-800 pb-5 flex flex-wrap justify-between items-end gap-4">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono mb-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          BIOMECÁNICA TÉCNICA 2D // ANIMACIÓN DE EJERCICIO
+        </div>
+        <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-white flex items-center gap-3">
+          Fortalecimiento de Isquiotibiales con Banda Elástica
+        </h1>
+        <p class="text-slate-400 text-sm mt-1">
+          Representación anatómica vectorial con mapeo de contracción muscular activa y vectores de tensión elástica.
+        </p>
+      </div>
+
+      <!-- Selector de ejercicio -->
+      <div class="flex items-center bg-slate-900/90 p-1.5 rounded-xl border border-slate-800 text-xs font-medium">
+        <button id="btnEx1" onclick="setExercise(0)" class="px-4 py-2 rounded-lg bg-indigo-600 text-white font-semibold transition shadow-sm">
+          1. Curl Femoral Prono (Aislamiento)
+        </button>
+        <button id="btnEx2" onclick="setExercise(1)" class="px-4 py-2 rounded-lg text-slate-400 hover:text-white transition">
+          2. Peso Muerto Rumano (Estiramiento)
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace: Reproductor y HUD de biomecánica -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Columna Izquierda / Central: Visualizador Vídeo-Animación -->
+      <div class="lg:col-span-8 flex flex-col space-y-4">
+        
+        <!-- Contenedor del Lienzo de Animación (Estilo Monitor Biomecánico) -->
+        <div class="relative bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl hud-grid aspect-[16/10] flex items-center justify-center">
+          
+          <!-- Canvas interactivo de alta resolución -->
+          <canvas id="biomechCanvas" class="w-full h-full object-contain block"></canvas>
+
+          <!-- HUD Overlays (Superposiciones técnicas en esquinas) -->
+          <div class="absolute top-4 left-4 pointer-events-none flex flex-col gap-1.5 font-mono text-xs">
+            <div class="bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-700/60 text-slate-300 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-red-500"></span>
+              <span>ZONA ACTIVA:</span>
+              <strong id="hudMuscleName" class="text-rose-400 font-bold">ISQUIOTIBIALES</strong>
+            </div>
+            <div class="bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-700/60 text-slate-300">
+              ÁNGULO RODILLA: <span id="hudAngle" class="text-cyan-400 font-bold">175°</span>
+            </div>
+          </div>
+
+          <div class="absolute top-4 right-4 pointer-events-none flex flex-col items-end gap-1.5 font-mono text-xs">
+            <div class="bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-700/60 text-slate-300 flex items-center gap-2">
+              <span>FASE:</span>
+              <strong id="hudPhaseName" class="text-amber-400 font-bold">CONCÉNTRICA</strong>
+            </div>
+            <div class="bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-700/60 text-slate-300">
+              TENSIÓN GOMA: <span id="hudBandTension" class="text-emerald-400 font-bold">Baja (1.2 kg)</span>
+            </div>
+          </div>
+
+          <!-- Medidor de Activación Muscular Integrado en Canvas (Inferior Izq) -->
+          <div class="absolute bottom-4 left-4 pointer-events-none bg-black/70 backdrop-blur-md px-4 py-2.5 rounded-xl border border-slate-700/70 w-56 font-mono text-xs space-y-1.5">
+            <div class="flex justify-between items-center">
+              <span class="text-slate-400">Activación Isquios:</span>
+              <span id="hudActivationPct" class="text-red-400 font-bold">18%</span>
+            </div>
+            <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden border border-slate-700">
+              <div id="hudActivationBar" class="h-full bg-gradient-to-r from-yellow-500 via-orange-500 to-red-600 transition-all duration-75" style="width: 18%"></div>
+            </div>
+          </div>
+
+          <!-- Indicador de Grabación en Progreso -->
+          <div id="recordingBadge" class="hidden absolute top-4 left-1/2 -translate-x-1/2 bg-red-600/90 text-white font-mono text-xs px-3 py-1 rounded-full animate-pulse flex items-center gap-2 shadow-lg">
+            <span class="w-2 h-2 rounded-full bg-white"></span>
+            GRABANDO CLIP DE VÍDEO...
+          </div>
+        </div>
+
+        <!-- Barra de Control de Vídeo / Reproductor -->
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3 shadow-lg">
+          
+          <!-- Scrubber / Barra de Tiempo -->
+          <div class="flex items-center gap-3">
+            <span id="timeCurrent" class="font-mono text-xs text-slate-400 w-10 text-right">0:00</span>
+            <input type="range" id="timeScrubber" min="0" max="1000" value="0" 
+                   class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500 hover:accent-indigo-400 transition" />
+            <span id="timeTotal" class="font-mono text-xs text-slate-400 w-10">0:06</span>
+          </div>
+
+          <!-- Botonera de reproducción -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+            <div class="flex items-center gap-2">
+              <!-- Play / Pause -->
+              <button id="btnPlayPause" onclick="togglePlay()" class="p-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white transition flex items-center justify-center w-11 h-11 shadow-md">
+                <svg id="iconPlay" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                <svg id="iconPause" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+              </button>
+
+              <!-- Reiniciar repetición -->
+              <button onclick="resetVideo()" title="Reiniciar ejercicio" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition w-11 h-11 flex items-center justify-center">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              </button>
+
+              <!-- Velocidades -->
+              <div class="flex items-center bg-slate-800 rounded-xl p-1 text-xs font-mono">
+                <button onclick="setSpeed(0.5)" id="spd05" class="px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white transition">0.5x</button>
+                <button onclick="setSpeed(1.0)" id="spd10" class="px-2.5 py-1.5 rounded-lg bg-indigo-500/30 text-indigo-300 font-bold transition">1.0x</button>
+                <button onclick="setSpeed(1.5)" id="spd15" class="px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white transition">1.5x</button>
+              </div>
+
+              <!-- Modo bucle toggle -->
+              <button id="btnLoop" onclick="toggleLoop()" title="Bucle automático" class="px-3 py-1.5 rounded-xl bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 text-xs font-mono flex items-center gap-1.5">
+                <span>🔁 Repetición continua</span>
+              </button>
+            </div>
+
+            <!-- Botón Exportar Vídeo WebM/MP4 -->
+            <button id="btnRecord" onclick="recordVideoClip()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-medium text-xs flex items-center gap-2 shadow-lg transition transform active:scale-95">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+              <span>Descargar Vídeo Corto (.webm)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Leyenda Anatómica del Dibujo -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-slate-900/60 border border-slate-800 p-3 rounded-xl text-xs">
+          <div class="flex items-center gap-2.5">
+            <div class="w-4 h-4 rounded-md bg-gradient-to-br from-red-500 to-rose-600 shadow-[0_0_8px_rgba(244,63,94,0.6)]"></div>
+            <div>
+              <p class="font-bold text-white">Agonista Principal</p>
+              <p class="text-slate-400 text-[11px]">Isquiotibiales (Bíceps/Semis)</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <div class="w-4 h-4 rounded-md bg-amber-500"></div>
+            <div>
+              <p class="font-bold text-white">Sinergista</p>
+              <p class="text-slate-400 text-[11px]">Glúteo Mayor / Gemelo</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <div class="w-4 h-4 rounded-md bg-cyan-400"></div>
+            <div>
+              <p class="font-bold text-white">Goma Elástica</p>
+              <p class="text-slate-400 text-[11px]">Resistencia Progresiva</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <div class="w-4 h-4 rounded-md bg-emerald-400"></div>
+            <div>
+              <p class="font-bold text-white">Estabilizador</p>
+              <p class="text-slate-400 text-[11px]">Core / Pelvis Neutra</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Columna Derecha: Guía Técnica y Biomecánica -->
+      <div class="lg:col-span-4 space-y-4">
+        
+        <!-- Ficha Técnica del Ejercicio -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4">
+          <div class="border-b border-slate-800 pb-3">
+            <span class="text-xs font-mono uppercase text-indigo-400 tracking-wider">Protocolo de Ejecución</span>
+            <h2 id="cardExerciseTitle" class="text-lg font-bold text-white mt-1">Curl Femoral Prono con Goma</h2>
+            <p id="cardExerciseSubtitle" class="text-xs text-slate-400 mt-0.5">Enfoque: Flexión pura de rodilla sin compensación lumbar.</p>
+          </div>
+
+          <!-- Músculos Clave -->
+          <div class="space-y-2">
+            <h3 class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Anatomía Implicada</h3>
+            <ul class="text-xs space-y-1.5 text-slate-400">
+              <li class="flex items-start gap-2">
+                <span class="text-rose-400 font-bold">•</span>
+                <span><strong class="text-slate-200">Bíceps Femoral (cabeza larga y corta):</strong> Mayor torque en los últimos 45° de flexión.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-rose-400 font-bold">•</span>
+                <span><strong class="text-slate-200">Semitendinoso y Semimembranoso:</strong> Estabilizan y rotan internamente la rodilla.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-400 font-bold">•</span>
+                <span><strong class="text-slate-200">Glúteo y Core:</strong> Mantienen la pelvis firmemente adherida al suelo para no arquear lumbares.</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Fases y Tempo -->
+          <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800/80 space-y-2">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-bold text-slate-300">Tempo Recomendado:</span>
+              <span class="font-mono text-indigo-400 font-bold">2 - 1 - 3</span>
+            </div>
+            <div class="grid grid-cols-3 gap-2 text-[11px] font-mono text-center">
+              <div class="p-1.5 bg-slate-900 rounded border border-slate-800">
+                <p class="text-amber-400 font-bold">2 seg</p>
+                <p class="text-slate-400 text-[10px]">Subida (Concéntrica)</p>
+              </div>
+              <div class="p-1.5 bg-slate-900 rounded border border-slate-800">
+                <p class="text-rose-400 font-bold">1 seg</p>
+                <p class="text-slate-400 text-[10px]">Pausa (Isometría)</p>
+              </div>
+              <div class="p-1.5 bg-slate-900 rounded border border-slate-800">
+                <p class="text-emerald-400 font-bold">3 seg</p>
+                <p class="text-slate-400 text-[10px]">Bajada (Excéntrica)</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Indicaciones y Errores Comunes -->
+          <div class="space-y-2">
+            <h3 class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Reglas Técnicas de Oro</h3>
+            <div class="space-y-2 text-xs">
+              <div class="p-2.5 rounded-lg bg-emerald-950/30 border border-emerald-800/40 text-emerald-300 flex items-start gap-2">
+                <span class="text-emerald-400 text-sm">✓</span>
+                <span><strong>Cadera anclada:</strong> Aprieta ligeramente los glúteos contra el suelo para que la pelvis no se levante.</span>
+              </div>
+              <div class="p-2.5 rounded-lg bg-emerald-950/30 border border-emerald-800/40 text-emerald-300 flex items-start gap-2">
+                <span class="text-emerald-400 text-sm">✓</span>
+                <span><strong>Tensión continua:</strong> No permitas que la goma quede holgada al extender la pierna.</span>
+              </div>
+              <div class="p-2.5 rounded-lg bg-rose-950/30 border border-rose-800/40 text-rose-300 flex items-start gap-2">
+                <span class="text-rose-400 text-sm">✕</span>
+                <span><strong>Error típico:</strong> Dar un tirón con la zona lumbar o soltar la pierna rápido en la bajada.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dosificación propuesta -->
+          <div class="pt-2 border-t border-slate-800 flex justify-between items-center text-xs text-slate-400">
+            <span>Series y Reps:</span>
+            <span class="font-bold text-white">3 a 4 series × 12 - 15 reps</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Script de Simulación Biomecánica y Grabación de Vídeo -->
+  <script>
+    // Configuración del canvas y estado
+    const canvas = document.getElementById('biomechCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Escalado para Retina / Ultra resolución
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 2;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+    }
+
+    let currentExercise = 0; // 0: Curl Femoral Prono, 1: Peso Muerto Rumano
+    let isPlaying = true;
+    let isLooping = true;
+    let playbackSpeed = 1.0;
+    let animProgress = 0; // 0.0 a 1.0
+    let lastTime = performance.now();
+    const cycleDurationMs = 6000; // 6 segundos por repetición completa (2s concéntrico, 1s pausa, 3s excéntrico)
+
+    // Elementos del HUD
+    const hudAngle = document.getElementById('hudAngle');
+    const hudPhaseName = document.getElementById('hudPhaseName');
+    const hudBandTension = document.getElementById('hudBandTension');
+    const hudActivationPct = document.getElementById('hudActivationPct');
+    const hudActivationBar = document.getElementById('hudActivationBar');
+    const hudMuscleName = document.getElementById('hudMuscleName');
+    const timeScrubber = document.getElementById('timeScrubber');
+    const timeCurrent = document.getElementById('timeCurrent');
+    const btnPlayPause = document.getElementById('btnPlayPause');
+    const iconPlay = document.getElementById('iconPlay');
+    const iconPause = document.getElementById('iconPause');
+
+    // Cambiar ejercicio
+    function setExercise(index) {
+      currentExercise = index;
+      animProgress = 0;
+      
+      const btn1 = document.getElementById('btnEx1');
+      const btn2 = document.getElementById('btnEx2');
+      const title = document.getElementById('cardExerciseTitle');
+      const subtitle = document.getElementById('cardExerciseSubtitle');
+
+      if (index === 0) {
+        btn1.className = "px-4 py-2 rounded-lg bg-indigo-600 text-white font-semibold transition shadow-sm";
+        btn2.className = "px-4 py-2 rounded-lg text-slate-400 hover:text-white transition";
+        title.textContent = "Curl Femoral Prono con Goma";
+        subtitle.textContent = "Enfoque: Flexión pura de rodilla sin compensación lumbar.";
+        hudMuscleName.textContent = "ISQUIOTIBIALES";
+      } else {
+        btn2.className = "px-4 py-2 rounded-lg bg-indigo-600 text-white font-semibold transition shadow-sm";
+        btn1.className = "px-4 py-2 rounded-lg text-slate-400 hover:text-white transition";
+        title.textContent = "Peso Muerto Rumano con Goma";
+        subtitle.textContent = "Enfoque: Bisagra de cadera y extensión de isquios y glúteos.";
+        hudMuscleName.textContent = "CADENA POSTERIOR (ISQUIOS + GLÚTEOS)";
+      }
+    }
+
+    function togglePlay() {
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        iconPlay.classList.add('hidden');
+        iconPause.classList.remove('hidden');
+        lastTime = performance.now();
+      } else {
+        iconPlay.classList.remove('hidden');
+        iconPause.classList.add('hidden');
+      }
+    }
+
+    function resetVideo() {
+      animProgress = 0;
+      timeScrubber.value = 0;
+      if (!isPlaying) togglePlay();
+    }
+
+    function setSpeed(spd) {
+      playbackSpeed = spd;
+      document.querySelectorAll('#spd05, #spd10, #spd15').forEach(el => {
+        el.className = "px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white transition";
+      });
+      if (spd === 0.5) document.getElementById('spd05').className = "px-2.5 py-1.5 rounded-lg bg-indigo-500/30 text-indigo-300 font-bold transition";
+      if (spd === 1.0) document.getElementById('spd10').className = "px-2.5 py-1.5 rounded-lg bg-indigo-500/30 text-indigo-300 font-bold transition";
+      if (spd === 1.5) document.getElementById('spd15').className = "px-2.5 py-1.5 rounded-lg bg-indigo-500/30 text-indigo-300 font-bold transition";
+    }
+
+    function toggleLoop() {
+      isLooping = !isLooping;
+      const btn = document.getElementById('btnLoop');
+      if (isLooping) {
+        btn.className = "px-3 py-1.5 rounded-xl bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 text-xs font-mono flex items-center gap-1.5";
+      } else {
+        btn.className = "px-3 py-1.5 rounded-xl bg-slate-800 text-slate-400 border border-slate-700 text-xs font-mono flex items-center gap-1.5";
+      }
+    }
+
+    timeScrubber.addEventListener('input', (e) => {
+      animProgress = parseFloat(e.target.value) / 1000;
+    });
+
+    // Curva de movimiento biomecánico basada en tiempo
+    // 0.00 a 0.33 (2s): Fase Concéntrica (subida talón)
+    // 0.33 a 0.50 (1s): Pausa isométrica máxima contracción
+    // 0.50 a 1.00 (3s): Fase Excéntrica (bajada controlada)
+    function calculateKinematics(p) {
+      let tNormalized = 0;
+      let phase = "CONCÉNTRICA";
+      let phaseColor = "#f59e0b"; // ámbar
+
+      if (p <= 0.333) {
+        // Concéntrica
+        const t = p / 0.333;
+        // Easing suave cuadrático
+        tNormalized = t * t * (3 - 2 * t);
+        phase = "F. CONCÉNTRICA (FLEXIÓN)";
+        phaseColor = "#f59e0b";
+      } else if (p <= 0.50) {
+        // Isométrica pico
+        tNormalized = 1.0;
+        phase = "PAUSA ISOMÉTRICA (PICO MÁXIMO)";
+        phaseColor = "#ef4444";
+      } else {
+        // Excéntrica
+        const t = (p - 0.50) / 0.50;
+        const ease = t * t * (3 - 2 * t);
+        tNormalized = 1.0 - ease;
+        phase = "F. EXCÉNTTRICA (EXTENSIÓN CONTROLADA)";
+        phaseColor = "#10b981";
+      }
+
+      return { tNormalized, phase, phaseColor };
+    }
+
+    // Dibujado del Curl Femoral Prono
+    function drawProneHamstringCurl(width, height, k) {
+      const { tNormalized, phase, phaseColor } = k;
+      
+      // Coordenadas base
+      const groundY = height * 0.76;
+      const matStartX = width * 0.15;
+      const matEndX = width * 0.88;
+
+      // 1. Suelo y colchoneta técnica
+      ctx.strokeStyle = "rgba(51, 65, 85, 0.4)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(width * 0.05, groundY + 12);
+      ctx.lineTo(width * 0.95, groundY + 12);
+      ctx.stroke();
+
+      // Colchoneta
+      ctx.fillStyle = "#1e293b";
+      ctx.strokeStyle = "#334155";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.roundRect(matStartX, groundY - 2, matEndX - matStartX, 14, 4);
+      ctx.fill();
+      ctx.stroke();
+
+      // 2. Anclaje de la goma (poste vertical izquierdo a ras de suelo)
+      const anchorX = width * 0.88;
+      const anchorY = groundY - 4;
+
+      // Poste anclaje
+      ctx.fillStyle = "#475569";
+      ctx.beginPath();
+      ctx.roundRect(anchorX - 8, groundY - 50, 16, 55, 3);
+      ctx.fill();
+      // Argolla
+      ctx.strokeStyle = "#94a3b8";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.arc(anchorX - 8, anchorY, 7, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // 3. Posición Anatómica del Cuerpo Humano (Tumbado prono)
+      // Escala anatómica proporcional
+      const headX = width * 0.28;
+      const headY = groundY - 18;
+
+      const chestX = width * 0.38;
+      const chestY = groundY - 14;
+
+      const hipX = width * 0.52;
+      const hipY = groundY - 16;
+
+      const kneeX = width * 0.68;
+      const kneeY = groundY - 14;
+
+      // Cinemática de la rodilla:
+      // En reposo (t = 0): tibia casi horizontal (ángulo ~175°)
+      // En contracción máxima (t = 1): rodilla flexionada a ~70° (talón al glúteo)
+      const tibiaLength = width * 0.14;
+      // Ángulo de la tibia respecto a la horizontal: de 0.05 rad (extensión casi total) a 1.95 rad (~112° respecto al fémur)
+      const angleRad = 0.08 + tNormalized * 1.85; 
+      const ankleX = kneeX - Math.cos(angleRad) * tibiaLength;
+      const ankleY = kneeY - Math.sin(angleRad) * tibiaLength;
+
+      // Pie
+      const footLength = width * 0.045;
+      const footAngle = angleRad - 0.7; // Tobillo relajado/dorsiflexión neutra
+      const toeX = ankleX - Math.cos(footAngle) * footLength;
+      const toeY = ankleY - Math.sin(footAngle) * footLength;
+
+      // Ángulo biomecánico de la rodilla en grados
+      const kneeDeg = Math.round(175 - tNormalized * 105);
+      hudAngle.textContent = kneeDeg + "°";
+
+      // Nivel de activación muscular (isquiotibiales)
+      // Concéntrico: sube del 20% al 100%
+      const activation = Math.round(18 + tNormalized * 82);
+      hudActivationPct.textContent = activation + "%";
+      hudActivationBar.style.width = activation + "%";
+
+      const tensionKg = (1.5 + tNormalized * 9.5).toFixed(1);
+      hudBandTension.textContent = `${tNormalized > 0.7 ? 'Alta' : tNormalized > 0.3 ? 'Media' : 'Baja'} (${tensionKg} kg)`;
+      hudPhaseName.textContent = phase;
+      hudPhaseName.style.color = phaseColor;
+
+      // 4. Dibujar Banda Elástica (Goma)
+      // Va desde el anclaje derecho hasta el tobillo
+      const bandTensionWidth = 6.5 - tNormalized * 2.2; // La goma se estira y se adelgaza
+      ctx.save();
+      ctx.beginPath();
+      // Curva catenaria / bezier según tensión
+      const sagY = (1 - tNormalized) * 12; // Se combea un poco si hay poca tensión
+      ctx.moveTo(anchorX - 10, anchorY);
+      ctx.quadraticCurveTo((anchorX + ankleX) / 2, (anchorY + ankleY) / 2 + sagY, ankleX, ankleY);
+      ctx.strokeStyle = "#06b6d4"; // Cian brillante
+      ctx.lineWidth = bandTensionWidth;
+      ctx.lineCap = "round";
+      ctx.shadowColor = "rgba(6, 182, 212, 0.8)";
+      ctx.shadowBlur = 10;
+      ctx.stroke();
+      ctx.restore();
+
+      // Flecha indicadora de vector de fuerza de resistencia (línea discontinua con flecha)
+      if (tNormalized > 0.25) {
+        ctx.save();
+        ctx.strokeStyle = "rgba(6, 182, 212, 0.5)";
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(ankleX, ankleY);
+        const vecX = ankleX + (anchorX - ankleX) * 0.25;
+        const vecY = ankleY + (anchorY - ankleY) * 0.25;
+        ctx.lineTo(vecX, vecY);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // 5. Dibujar Silueta Anatómica del Cuerpo
+
+      // Brazos y cabeza (relajados sobre colchoneta)
+      ctx.fillStyle = "#334155";
+      ctx.beginPath();
+      // Cabeza
+      ctx.arc(headX, headY, 15, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Torso y tronco
+      ctx.fillStyle = "#1e293b";
+      ctx.strokeStyle = "#475569";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(headX + 12, headY + 4);
+      ctx.quadraticCurveTo(chestX, chestY - 14, hipX, hipY - 14);
+      ctx.lineTo(hipX, hipY + 10);
+      ctx.lineTo(chestX, chestY + 10);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Zona Lumbar / Core (Estabilizador - Verde suave)
+      ctx.fillStyle = "rgba(16, 185, 129, 0.25)";
+      ctx.strokeStyle = "rgba(16, 185, 129, 0.6)";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.roundRect(chestX + 20, hipY - 12, (hipX - chestX) - 10, 16, 4);
+      ctx.fill();
+      ctx.stroke();
+
+      // Glúteo Mayor (Sinergista / fijador de pelvis)
+      ctx.save();
+      const gluteActivation = 0.25 + tNormalized * 0.35;
+      ctx.fillStyle = `rgba(245, 158, 11, ${gluteActivation})`; // ámbar dinámico
+      ctx.strokeStyle = "#f59e0b";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.ellipse(hipX - 2, hipY - 6, 18, 14, -0.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+
+      // Pierna contralateral (la que está apoyada fija en el suelo)
+      ctx.strokeStyle = "#334155";
+      ctx.lineWidth = 9;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(hipX, hipY);
+      ctx.lineTo(kneeX + 4, kneeY + 2);
+      ctx.lineTo(anchorX - 25, groundY - 2);
+      ctx.stroke();
+
+      // PIERNA ACTIVA (Fémur / Muslo)
+      // Dibujar estructura ósea y masa muscular
+      ctx.save();
+      // Fémur (hueso central / guía)
+      ctx.strokeStyle = "#64748b";
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.moveTo(hipX, hipY);
+      ctx.lineTo(kneeX, kneeY);
+      ctx.stroke();
+
+      // --- MÚSCULO AGONISTA PRINCIPAL: ISQUIOTIBIALES ---
+      // Situados en la parte posterior (arriba al estar prono) del muslo
+      // Se expande e intensifica con el calor de contracción
+      const muscleThickness = 12 + tNormalized * 10;
+      const r = Math.round(239 + tNormalized * 16);
+      const g = Math.round(68 - tNormalized * 20);
+      const b = Math.round(68 - tNormalized * 40);
+      const glowBlur = 8 + tNormalized * 20;
+
+      // Glow de contracción muscular máxima
+      ctx.shadowColor = `rgba(${r}, ${g}, ${b}, ${0.5 + tNormalized * 0.5})`;
+      ctx.shadowBlur = glowBlur;
+
+      // Gradiente muscular térmico
+      const grad = ctx.createLinearGradient(hipX, hipY - 14, kneeX, kneeY - 14);
+      grad.addColorStop(0, `rgb(${r}, ${g}, ${b})`);
+      grad.addColorStop(0.5, `rgb(255, ${Math.round(120 - tNormalized * 50)}, 0)`);
+      grad.addColorStop(1, `rgb(${r}, ${g}, ${b})`);
+
+      ctx.fillStyle = grad;
+      ctx.strokeStyle = `rgba(255, 255, 255, ${0.4 + tNormalized * 0.5})`;
+      ctx.lineWidth = 1.5;
+
+      // Masa muscular del isquiotibial (vientre muscular que se abulta con la flexión)
+      ctx.beginPath();
+      const midFemurX = (hipX + kneeX) / 2;
+      const midFemurY = (hipY + kneeY) / 2 - (muscleThickness * 0.95);
+
+      ctx.moveTo(hipX + 4, hipY - 4);
+      ctx.quadraticCurveTo(midFemurX, midFemurY, kneeX - 4, kneeY - 6);
+      ctx.lineTo(kneeX - 2, kneeY + 2);
+      ctx.lineTo(hipX + 2, hipY + 2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+
+      // Articulación de la Rodilla
+      ctx.fillStyle = "#94a3b8";
+      ctx.beginPath();
+      ctx.arc(kneeX, kneeY, 6, 0, Math.PI * 2);
+      ctx.fill();
+
+      // TIBIA / PANTORRILLA (Gemelos / Gastrocnemio)
+      // Hueso tibia
+      ctx.strokeStyle = "#64748b";
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.moveTo(kneeX, kneeY);
+      ctx.lineTo(ankleX, ankleY);
+      ctx.stroke();
+
+      // Masa gemelos (sinergista de flexión de rodilla)
+      const calfActivation = 0.2 + tNormalized * 0.35;
+      ctx.fillStyle = `rgba(245, 158, 11, ${calfActivation})`;
+      ctx.beginPath();
+      const midTibiaX = (kneeX + ankleX) / 2;
+      const midTibiaY = (kneeY + ankleY) / 2;
+      // Perpendicular para el abultamiento del gemelo
+      const perpAngle = angleRad + Math.PI / 2;
+      const bulgeX = midTibiaX + Math.cos(perpAngle) * 9;
+      const bulgeY = midTibiaY + Math.sin(perpAngle) * 9;
+
+      ctx.moveTo(kneeX, kneeY);
+      ctx.quadraticCurveTo(bulgeX, bulgeY, ankleX, ankleY);
+      ctx.lineTo(midTibiaX - Math.cos(perpAngle)*4, midTibiaY - Math.sin(perpAngle)*4);
+      ctx.closePath();
+      ctx.fill();
+
+      // Tobillera / Correa de la goma
+      ctx.fillStyle = "#0284c7";
+      ctx.beginPath();
+      ctx.arc(ankleX, ankleY, 7, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Pie
+      ctx.strokeStyle = "#94a3b8";
+      ctx.lineWidth = 6;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(ankleX, ankleY);
+      ctx.lineTo(toeX, toeY);
+      ctx.stroke();
+
+      // 6. Arco y Transportador de Ángulos de Rodilla (HUD Biomecánico)
+      ctx.save();
+      ctx.strokeStyle = "rgba(6, 182, 212, 0.7)";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(kneeX, kneeY, 26, -Math.PI + 0.1, -Math.PI + angleRad, false);
+      ctx.stroke();
+
+      // Etiqueta flotante con el ángulo
+      ctx.fillStyle = "#38bdf8";
+      ctx.font = "bold 11px monospace";
+      ctx.fillText(`${kneeDeg}°`, kneeX - 38, kneeY - 32);
+      ctx.restore();
+
+      // 7. Etiqueta Anatómica con línea directriz a Isquiotibiales
+      ctx.save();
+      const calloutX = midFemurX - 20;
+      const calloutY = midFemurY - 45;
+      ctx.strokeStyle = "rgba(244, 63, 94, 0.7)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(midFemurX, midFemurY);
+      ctx.lineTo(calloutX, calloutY);
+      ctx.lineTo(calloutX - 40, calloutY);
+      ctx.stroke();
+
+      // Caja de texto
+      ctx.fillStyle = "rgba(15, 23, 42, 0.85)";
+      ctx.strokeStyle = "rgba(244, 63, 94, 0.8)";
+      ctx.beginPath();
+      ctx.roundRect(calloutX - 180, calloutY - 20, 140, 26, 4);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = "#fda4af";
+      ctx.font = "bold 11px system-ui";
+      ctx.fillText("ISQUIOTIBIALES", calloutX - 170, calloutY - 4);
+      ctx.restore();
+    }
+
+    // Dibujado del Peso Muerto Rumano con Goma (Ejercicio 2)
+    function drawBandRDL(width, height, k) {
+      const { tNormalized, phase, phaseColor } = k;
+      
+      const groundY = height * 0.82;
+      const centerX = width * 0.48;
+
+      // Suelo
+      ctx.strokeStyle = "rgba(51, 65, 85, 0.4)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(width * 0.1, groundY + 8);
+      ctx.lineTo(width * 0.9, groundY + 8);
+      ctx.stroke();
+
+      // Cinemática RDL (Bisagra de cadera):
+      // tNormalized = 0 (de pie erguido, cadera extendida)
+      // tNormalized = 1 (inclinación profunda, cadera atrás, isquios en máximo estiramiento bajo tensión)
+      const ankleX = centerX;
+      const ankleY = groundY;
+
+      // Rodilla: ligera flexión fija (15° a 20°)
+      const kneeX = centerX - 12 - tNormalized * 15;
+      const kneeY = groundY - height * 0.22;
+
+      // Cadera: viaja hacia atrás a medida que baja el tronco
+      const hipX = centerX - 30 - tNormalized * 65;
+      const hipY = groundY - height * 0.44 + tNormalized * 20;
+
+      // Hombro: desciende pivotando sobre la cadera
+      // Ángulo de inclinación del torso: de 85° (vertical) a 20° (casi paralelo al suelo)
+      const torsoAngle = 1.45 - tNormalized * 1.15;
+      const torsoLength = height * 0.28;
+      const shoulderX = hipX + Math.cos(torsoAngle) * torsoLength;
+      const shoulderY = hipY - Math.sin(torsoAngle) * torsoLength;
+
+      // Cabeza alineada con la columna
+      const headX = shoulderX + Math.cos(torsoAngle) * 28;
+      const headY = shoulderY - Math.sin(torsoAngle) * 28;
+
+      // Manos: bajan perpendiculares sosteniendo la goma
+      const handX = kneeX + 18 - tNormalized * 5;
+      const handY = shoulderY + height * 0.22;
+
+      // Pie
+      const footX = ankleX - 10;
+      const footY = groundY;
+
+      // Datos HUD
+      const hipAngleDeg = Math.round(170 - tNormalized * 90);
+      hudAngle.textContent = hipAngleDeg + "° (Cadera)";
+      const activation = Math.round(35 + tNormalized * 65);
+      hudActivationPct.textContent = activation + "%";
+      hudActivationBar.style.width = activation + "%";
+
+      const tensionKg = (3.0 + tNormalized * 12.0).toFixed(1);
+      hudBandTension.textContent = `${tNormalized > 0.6 ? 'Alta' : 'Media'} (${tensionKg} kg)`;
+      hudPhaseName.textContent = tNormalized > 0.5 ? "F. EXCÉNTRICA (ESTIRAMIENTO CON TENSIÓN)" : "F. CONCÉNTRICA (EXTENSIÓN DE CADERA)";
+      hudPhaseName.style.color = phaseColor;
+
+      // 1. Banda elástica (pisada bajo los pies y sostenida por las manos)
+      ctx.save();
+      ctx.strokeStyle = "#06b6d4";
+      ctx.lineWidth = 5.5 - tNormalized * 1.8;
+      ctx.shadowColor = "rgba(6, 182, 212, 0.8)";
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      // Desde el pie hasta las manos
+      ctx.moveTo(footX + 10, footY + 4);
+      ctx.lineTo(handX, handY);
+      ctx.stroke();
+      ctx.restore();
+
+      // 2. Columna neutra / Espalda recta (Indicador verde técnico)
+      ctx.strokeStyle = "rgba(16, 185, 129, 0.4)";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(hipX, hipY);
+      ctx.lineTo(shoulderX, shoulderY);
+      ctx.stroke();
+
+      // 3. Piernas y Musculatura Isquiotibial en estiramiento
+      // Fémur
+      ctx.strokeStyle = "#64748b";
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.moveTo(hipX, hipY);
+      ctx.lineTo(kneeX, kneeY);
+      ctx.stroke();
+
+      // Isquiotibiales (activación y estiramiento excéntrico de alta tensión)
+      ctx.save();
+      const r = Math.round(239);
+      const g = Math.round(68 + (1 - tNormalized) * 80);
+      const b = 68;
+      ctx.shadowColor = `rgba(239, 68, 68, ${0.4 + tNormalized * 0.6})`;
+      ctx.shadowBlur = 10 + tNormalized * 15;
+
+      ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+      ctx.beginPath();
+      const midFemurX = (hipX + kneeX) / 2 - 8;
+      const midFemurY = (hipY + kneeY) / 2;
+      ctx.moveTo(hipX, hipY);
+      ctx.quadraticCurveTo(midFemurX - (10 + tNormalized * 6), midFemurY, kneeX, kneeY);
+      ctx.lineTo(kneeX + 4, kneeY + 2);
+      ctx.lineTo(hipX + 4, hipY + 4);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+
+      // Glúteo
+      ctx.fillStyle = `rgba(245, 158, 11, ${0.4 + (1 - tNormalized) * 0.5})`;
+      ctx.beginPath();
+      ctx.ellipse(hipX - 6, hipY - 6, 16, 20, -0.4, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Tibia y pie
+      ctx.strokeStyle = "#64748b";
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.moveTo(kneeX, kneeY);
+      ctx.lineTo(ankleX, ankleY);
+      ctx.stroke();
+
+      ctx.fillStyle = "#334155";
+      ctx.beginPath();
+      ctx.roundRect(footX - 10, footY - 4, 34, 10, 3);
+      ctx.fill();
+
+      // Tronco y Brazos
+      ctx.fillStyle = "#1e293b";
+      ctx.strokeStyle = "#475569";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(hipX, hipY);
+      ctx.lineTo(shoulderX, shoulderY);
+      ctx.stroke();
+
+      // Brazos estirados hacia la goma
+      ctx.strokeStyle = "#94a3b8";
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.moveTo(shoulderX, shoulderY);
+      ctx.lineTo(handX, handY);
+      ctx.stroke();
+
+      // Cabeza
+      ctx.fillStyle = "#475569";
+      ctx.beginPath();
+      ctx.arc(headX, headY, 15, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Etiqueta anatómica
+      ctx.fillStyle = "#fda4af";
+      ctx.font = "bold 11px system-ui";
+      ctx.fillText("ISQUIOTIBIALES (ESTIRAMIENTO BAJO CARGA)", midFemurX - 120, midFemurY);
+    }
+
+    // Bucle de renderizado a 60 FPS
+    function renderLoop(currentTime) {
+      const dt = currentTime - lastTime;
+      lastTime = currentTime;
+
+      if (isPlaying) {
+        animProgress += (dt * playbackSpeed) / cycleDurationMs;
+        if (animProgress >= 1.0) {
+          if (isLooping) {
+            animProgress = animProgress % 1.0;
+          } else {
+            animProgress = 1.0;
+            togglePlay();
+          }
+        }
+        timeScrubber.value = Math.round(animProgress * 1000);
+      }
+
+      // Actualizar tiempo en HUD
+      const currentSeconds = (animProgress * 6).toFixed(1);
+      timeCurrent.textContent = `0:0${Math.floor(currentSeconds)}`;
+
+      // Limpiar lienzo
+      const rect = canvas.getBoundingClientRect();
+      ctx.clearRect(0, 0, rect.width, rect.height);
+
+      // Calcular cinemática
+      const kinematics = calculateKinematics(animProgress);
+
+      // Renderizar ejercicio activo
+      if (currentExercise === 0) {
+        drawProneHamstringCurl(rect.width, rect.height, kinematics);
+      } else {
+        drawBandRDL(rect.width, rect.height, kinematics);
+      }
+
+      requestAnimationFrame(renderLoop);
+    }
+
+    // Grabador de Vídeo Clip usando MediaRecorder nativo del Canvas
+    let mediaRecorder = null;
+    let recordedChunks = [];
+
+    function recordVideoClip() {
+      const recordBtn = document.getElementById('btnRecord');
+      const recordingBadge = document.getElementById('recordingBadge');
+
+      if (!canvas.captureStream) {
+        alert("Tu navegador no soporta captura directa de vídeo.");
+        return;
+      }
+
+      // Reiniciar ejercicio al principio para grabar una repetición completa perfecta
+      animProgress = 0;
+      if (!isPlaying) togglePlay();
+
+      const stream = canvas.captureStream(60); // 60 FPS
+      recordedChunks = [];
+      
+      const options = { mimeType: 'video/webm;codecs=vp9' };
+      try {
+        mediaRecorder = new MediaRecorder(stream, options);
+      } catch (e) {
+        try {
+          mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+        } catch (e2) {
+          mediaRecorder = new MediaRecorder(stream);
+        }
+      }
+
+      mediaRecorder.ondataavailable = function(e) {
+        if (e.data.size > 0) recordedChunks.push(e.data);
+      };
+
+      mediaRecorder.onstop = function() {
+        const blob = new Blob(recordedChunks, { type: 'video/webm' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        const exName = currentExercise === 0 ? 'curl_femoral_isquios_goma' : 'peso_muerto_rumano_goma';
+        a.download = `${exName}.webm`;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }, 100);
+
+        recordingBadge.classList.add('hidden');
+        recordBtn.innerHTML = `<span>✓ Vídeo Descargado!</span>`;
+        setTimeout(() => {
+          recordBtn.innerHTML = `
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            <span>Descargar Vídeo Corto (.webm)</span>
+          `;
+        }, 3000);
+      };
+
+      mediaRecorder.start();
+      recordingBadge.classList.remove('hidden');
+      recordBtn.innerHTML = `<span>● Grabando repetición...</span>`;
+
+      // Grabar exactamente un ciclo completo (6 segundos a 1x)
+      setTimeout(() => {
+        if (mediaRecorder && mediaRecorder.state === "recording") {
+          mediaRecorder.stop();
+        }
+      }, 6100);
+    }
+
+    // Inicialización al cargar la ventana
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('DOMContentLoaded', () => {
+      resizeCanvas();
+      lastTime = performance.now();
+      requestAnimationFrame(renderLoop);
+    });
+    // Iniciar inmediatamente
+    resizeCanvas();
+    requestAnimationFrame(renderLoop);
+  </script>
+</body>
+</html>
