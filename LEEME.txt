@@ -1,52 +1,42 @@
 ========================================================================
-ATLAS ANATÓMICO: 24 EJERCICIOS CON GOMAS ELÁSTICAS (DIBUJOS TÉCNICOS)
-Directorio: D:\Vídeo con gomas\
-Repositorio Web: https://elenabenitocases.github.io/Ejercicios-gomas/
+ATLAS ANATÓMICO Y BIOMECÁNICO: 24 EJERCICIOS + 11 MÓDULOS DE BIOMECÁNICA
+Directorio local: D:\Vídeo con gomas\
+Repositorio GitHub: https://github.com/elenabenitocases/Ejercicios-gomas
+Sitio Web en vivo:  https://elenabenitocases.github.io/Ejercicios-gomas/
 ========================================================================
 
-¡Hola! Esta guía ha sido transformada para basarse exclusivamente en
-DIBUJOS TÉCNICOS ILUSTRATIVOS en dos fases (Inicio y Contracción),
-detallando paso a paso:
-1. Dónde y cómo colocar la goma elástica (anclaje, por dónde pasa la goma).
-2. Mecánica articular clara (si se flexiona o se extiende la rodilla/codo).
+Esta aplicación web combina dos grandes secciones de estudio e instrucción:
+
+SECCIÓN 1: 24 EJERCICIOS ILUSTRADOS CON GOMAS ELÁSTICAS
+Cada ficha contiene:
+1. Dónde y cómo colocar la goma elástica (anclaje, posición y sujeción).
+2. Mecánica articular (flexión vs extensión en dos fases ilustradas con SVG).
 3. Músculos activados (Agonistas principales, sinergistas y estabilizadores).
-4. Errores frecuentes a evitar.
+4. Errores frecuentes a evitar y aclaración detallada de cuádriceps (#01 y #02).
 
-ÍNDICE DE LOS 24 EJERCICIOS INCLUIDOS:
-------------------------------------------------------------------------
-PIERNAS, CUÁDRICEPS Y GLÚTEOS:
-01. Extensión de Rodilla Terminal con Goma (TKE) - Cuádriceps Aislado
-02. Sentadilla Frontal con Goma Pisada (Front Squat) - Cuádriceps + Glúteos
-03. Sentadilla Isométrica en Pared (Wall Sit) con Miniband - Cuádriceps + Glúteo Medio
-04. Zancadas / Lunges con Goma Pisada - Cuádriceps Unilateral + Glúteos
-05. Curl Femoral con Goma (Prono / Suelo) - Aislamiento Isquiotibiales
-06. Pasos Laterales con Miniband (Monster Walk) - Glúteo Medio y Abductores
-07. Puente de Glúteo / Hip Thrust con Banda - Glúteo Mayor y Cadena Posterior
-08. Peso Muerto Rumano con Banda (RDL) - Isquiotibiales y Glúteos
-24. Elevación de Talones con Banda (Calf Raise) - Gemelos y Sóleo
+SECCIÓN 2: 11 MÓDULOS DE BIOMECÁNICA, OSTEOPATÍA Y CONTROL MOTOR
+Bloque I: Mecánica Articular y Movimiento (Las bases de la biomecánica)
+- Módulo 01: Anteversión y retroversión pélvica (curvas lumbares, butt wink en sentadilla y peso muerto)
+- Módulo 02: Supinación y pronación (pie/arco plantar -> rotación tibial -> rodilla; antebrazo radio-cúbito)
+- Módulo 03: Abducción y aducción (estabilidad pélvica, glúteo medio, signo de Trendelenburg)
+- Módulo 04: Rotación interna y externa (espacio subacromial en hombro y prevención del manguito; cadera)
+- Módulo 05: Dorsiflexión y flexión plantar de tobillo (astrágalo, compensación lumbar en sentadilla)
+- Módulo 06: Disociación lumbo-pélvica (bisagra de cadera pura con columna neutra vs flexión lumbar en 'C')
 
-ESPALDA Y TRACCIÓN:
-09. Remo Horizontal con Goma (Sentado o de Pie) - Dorsal Ancho y Romboides
-10. Jalón al Pecho con Goma (Lat Pulldown) - Dorsal Ancho (Tracción Vertical)
-11. Band Pull-Apart (Separaciones Horizontales) - Deltoides Posterior y Romboides
-12. Face Pull con Banda - Deltoides Posterior y Manguito Rotador
+Bloque II: Conceptos Estructurales y Osteopáticos (El cuerpo como un todo)
+- Módulo 07: Fascia y cadenas lesionales ascendentes (esguince de tobillo mal curado -> torsión pélvica -> cervicalgia)
+- Módulo 08: Respiración diafragmática y bracing intraabdominal (diafragma en L1-L3, cilindro hidráulico 360°)
+- Módulo 09: Descompresión articular vs Compresión (Ley de Wolff para hueso vs nutrición discal por imbibición)
 
-PECHO Y EMPUJES:
-13. Flexiones Resistidas con Goma (Push-ups) - Pectoral Mayor y Tríceps
-14. Aperturas / Cruce de Pecho con Banda - Pectoral Mayor Aislado
-15. Press de Pecho de Pie con Banda - Pectoral Mayor y Tríceps
+Bloque III: Control Motor y Prevención (Conexión cerebro-músculo)
+- Módulo 10: Propiocepción y mecanorreceptores (husos neuromusculares, OTG, ceguera sensorial y prevención de recidivas)
+- Módulo 11: Activación vs Tensión muscular (el mito del músculo tenso/duro: espasmo protector vs fuerza real)
 
-HOMBROS Y DELTOIDES:
-16. Press Militar / Overhead Press con Banda - Deltoides Anterior y Tríceps
-17. Elevaciones Laterales con Goma - Deltoides Lateral Aislado
-18. Remo al Mentón con Banda (Upright Row) - Trapecio Superior y Hombros
-
-BRAZOS (BÍCEPS Y TRÍCEPS):
-19. Curl de Bíceps con Banda Elástica - Bíceps Braquial
-20. Tríceps Pushdown con Banda en Polea Alta - Tríceps Braquial
-21. Extensión de Tríceps sobre la Cabeza (Overhead) - Cabeza Larga del Tríceps
-
-CORE Y MULTIARTICULARES GLOBALES:
-22. Press Pallof con Goma - Core Anti-rotación y Oblicuos
-23. Thruster con Goma (Sentadilla + Press) - Multiarticular Total de Cuerpo Completo
+========================================================================
+CARACTERÍSTICAS TÉCNICAS:
+- 100% SVG nativo (sin vídeos, sin simuladores que marean, solo dibujos técnicos nítidos).
+- Selector maestro para alternar entre Ejercicios con Gomas y Módulos Biomecánicos.
+- Modal de zoom para ampliar cualquier diagrama en pantalla completa.
+- Filtros por categoría y buscador instantáneo.
+- Formato optimizado para impresión (Ctrl + P) para fichas clínicas y deportivas.
 ========================================================================
