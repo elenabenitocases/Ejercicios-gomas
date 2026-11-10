@@ -1,5 +1,5 @@
 ========================================================================
-ATLAS BIOMECÁNICO: 24 EJERCICIOS (VÍDEO 60 FPS + PDF) + 11 MÓDULOS DE BIOMECÁNICA
+ATLAS BIOMECÁNICO: 24 EJERCICIOS + 11 MÓDULOS BIOMECÁNICA + 8 RUTINAS DE MOVILIDAD
 Directorio local: D:\Vídeo con gomas\
 Repositorio GitHub: https://github.com/elenabenitocases/Ejercicios-gomas
 Sitio web en vivo:  https://elenabenitocases.github.io/Ejercicios-gomas/
@@ -13,7 +13,7 @@ Esta suite interactiva ofrece una experiencia dual completa en cada ejercicio:
 - Mapa de calor muscular incandescente (rojo en agonista activo, ámbar en sinergistas).
 - Vectores de tensión elástica cyan y eje de alineación postural verde esmeralda.
 - HUD en vivo con ángulo articular, fase del movimiento y porcentaje de activación.
-- Grabador de vídeo WebM a 60 fps directo al ordenador (sin subir archivos pesados).
+- Grabador de vídeo WebM a 60 fps directo al ordenador (sin ocupar espacio en el repositorio).
 
 2. LÁMINA TÉCNICA ANATÓMICA SVG CON MODAL DE ZOOM
 - Dibujo vectorial técnico de dos fases (fase 1: inicio y anclaje / fase 2: ejecución).
@@ -27,7 +27,18 @@ Esta suite interactiva ofrece una experiencia dual completa en cada ejercicio:
 - Biotensegridad y osteopatía (fascia, cadenas lesionales, respiración y bracing en 360°).
 - Control motor (propiocepción y mitos de tensión muscular).
 
+5. SECCIÓN ESPECIALIZADA: 8 RUTINAS DE MOVILIDAD PARA CORREDORES Y CICLISTAS
+- Tobillo (Knee-to-wall para amortiguación de impacto y punto muerto inferior).
+- Psoas-Ilíaco (Couch stretch para revertir la flexión del sillín y abrir zancada).
+- Cadera 90/90 (Rotación interna anti-cintilla iliotibial y alineación de rodilla).
+- World's Greatest Stretch (Disociación escapulopélvica y rotación torácica).
+- Enhebrar la aguja (Descompresión de cifosis dorsal del manillar).
+- Barridos isquiosurales (Ciclo acortamiento-estiramiento sin rebotes).
+- Sentadilla Cossack (Aductores en plano frontal anti-pubalgia).
+- Descompresión ITB (Prevención del síndrome del limpiaparabrisas).
+
 CÓMO ABRIR:
-- Haz doble clic en "Abrir_Videos.bat" para iniciar la suite en tu navegador.
+- Atlas General (24 ejercicios + 11 módulos + movilidad): Doble clic en "Abrir_Videos.bat"
+- Suite Exclusiva de Movilidad para Corredores y Ciclistas: Doble clic en "Abrir_Movilidad.bat"
 - Funciona 100% offline sin necesidad de conexión ni instalaciones previas.
 ========================================================================

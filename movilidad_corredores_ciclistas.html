@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movilidad Articular para Corredores y Ciclistas | Atlas Biomecánico</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #111827;
+      --card-border: #1f2937;
+      --text: #f9fafb;
+      --text-muted: #9ca3af;
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --accent-cyan: #06b6d4;
+      --accent-red: #ef4444;
+      --accent-amber: #f59e0b;
+      --accent-green: #10b981;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.5;
+      padding-bottom: 80px;
+    }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 16px; }
+
+    /* Header */
+    header {
+      background: #030712;
+      border-bottom: 2px solid #1f2937;
+      padding: 28px 0 20px;
+    }
+    .header-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: monospace;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      background: rgba(2, 132, 199, 0.15);
+      border: 1px solid rgba(2, 132, 199, 0.4);
+      color: #38bdf8;
+    }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #38bdf8; }
+    h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 6px; }
+    .subtitle { color: var(--text-muted); font-size: 14px; max-width: 960px; }
+
+    /* Barra de navegación superior */
+    .top-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .nav-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #1f2937;
+      color: #e5e7eb;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid #374151;
+      transition: all 0.2s;
+    }
+    .nav-pill:hover { background: #374151; color: #fff; }
+    .nav-pill.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+    /* Selector de Atleta y Velocidades */
+    .controls-strip {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      background: #111827;
+      border: 1px solid var(--card-border);
+      padding: 10px 16px;
+      border-radius: 12px;
+      margin: 20px 0;
+    }
+    .control-group { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
+    .btn-toggle {
+      background: #1f2937;
+      border: 1px solid #374151;
+      color: #e5e7eb;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.15s;
+    }
+    .btn-toggle.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+    /* Master Biomechanical Studio */
+    .master-studio {
+      background: #030712;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
+    }
+    .studio-header {
+      padding: 14px 20px;
+      background: #111827;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .studio-title { font-size: 16px; font-weight: 700; color: #fff; }
+    .studio-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    
+    .canvas-wrapper {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      width: 100%;
+      background: #020617;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    canvas { width: 100%; height: 100%; display: block; }
+
+    /* HUD overlays */
+    .hud-box {
+      position: absolute;
+      background: rgba(3, 7, 18, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(55, 65, 81, 0.8);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-family: monospace;
+      font-size: 11px;
+      pointer-events: none;
+    }
+    .hud-tl { top: 12px; left: 12px; }
+    .hud-tr { top: 12px; right: 12px; text-align: right; }
+    .hud-bl { bottom: 12px; left: 12px; }
+
+    /* Controles de reproducción */
+    .player-controls {
+      background: #0b0f19;
+      padding: 12px 18px;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .scrubber-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: monospace;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    input[type=range] {
+      flex: 1;
+      height: 6px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+    .buttons-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Selector de Ejercicios en Cuadrícula */
+    .selector-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 8px;
+      padding: 12px;
+      background: #030712;
+      border-top: 1px solid var(--card-border);
+    }
+    .mob-selector-btn {
+      background: #111827;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s;
+    }
+    .mob-selector-btn:hover { background: #1f2937; color: #fff; }
+    .mob-selector-btn.active { background: #0369a1; border-color: #38bdf8; color: #fff; font-weight: 700; }
+    .btn-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      background: rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* Filtros de la Galería */
+    .filter-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 24px 0 16px;
+    }
+    .filter-btn {
+      background: #111827;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover { background: #1f2937; color: #fff; }
+    .filter-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+    /* Tarjetas de Ejercicios de Movilidad */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    @media (min-width: 900px) {
+      .cards-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .mob-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .card-header {
+      padding: 14px 16px;
+      background: #162032;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .card-title { font-size: 15px; font-weight: 700; color: #fff; line-height: 1.3; }
+    .card-target { font-size: 12px; color: #38bdf8; font-weight: 600; margin-top: 2px; }
+    .card-tag {
+      font-size: 11px;
+      font-family: monospace;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #34d399;
+      white-space: nowrap;
+    }
+
+    .card-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .info-block {
+      background: #0b0f19;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+    .info-block-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .athlete-focus {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    @media (min-width: 600px) {
+      .athlete-focus { grid-template-columns: 1fr 1fr; }
+    }
+    .focus-box {
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 11.5px;
+    }
+    .focus-runner { background: rgba(2, 132, 199, 0.12); border: 1px solid rgba(2, 132, 199, 0.3); color: #7dd3fc; }
+    .focus-cyclist { background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); color: #fde047; }
+    
+    .card-canvas-wrap {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      background: #020617;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .card-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 8px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .btn-record-clip {
+      background: linear-gradient(135deg, #e11d48, #f59e0b);
+      border: none;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.1s;
+    }
+    .btn-record-clip:active { transform: scale(0.96); }
+
+    /* Protocolo Fisioterapéutico */
+    .protocol-section {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      padding: 20px;
+      margin-top: 40px;
+    }
+    .protocol-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 14px;
+    }
+    @media (min-width: 768px) {
+      .protocol-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .protocol-card {
+      background: #020617;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 12.5px;
+    }
+    .protocol-card h3 { font-size: 14px; font-weight: 700; color: #38bdf8; margin-bottom: 6px; }
+
+    /* Imprimir / PDF */
+    @media print {
+      body { background: #fff; color: #000; padding: 0; }
+      header, .controls-strip, .master-studio, .filter-tabs, .player-controls, .btn-record-clip { display: none !important; }
+      .cards-grid { grid-template-columns: 1fr; gap: 20px; }
+      .mob-card { border: 1px solid #ccc; box-shadow: none; page-break-inside: avoid; }
+      .card-header { background: #eee; color: #000; }
+      .card-title { color: #000; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cabecera -->
+  <header>
+    <div class="container">
+      <div class="header-top">
+        <div>
+          <div class="badge">
+            <span class="badge-dot"></span>
+            SECCIÓN ESPECIALIZADA // ATLETAS DE RESISTENCIA
+          </div>
+          <h1>Movilidad Articular para Corredores y Ciclistas</h1>
+          <p class="subtitle">
+            8 rutinas cinemáticas con animación vectorial a 60 FPS, telemetría articular de rango óptimo (ROM), mapeo de cápsula y fascia, y justificación biomecánica para prevenir lesiones en carrera y sobre la bicicleta.
+          </p>
+        </div>
+
+        <button onclick="window.print()" class="nav-pill" style="background:#0284c7; border-color:#0284c7; color:#fff;">
+          🖨️ Imprimir / Guardar Guía en PDF
+        </button>
+      </div>
+
+      <!-- Enlaces de navegación rápida -->
+      <div class="top-links">
+        <a href="index.html" class="nav-pill">
+          🏋️ Volver al Atlas Principal (24 Ejercicios con Gomas)
+        </a>
+        <a href="#masterStudioSec" class="nav-pill active">
+          🎬 Estudio Biomecánico Maestro (60 FPS)
+        </a>
+        <a href="#galleryCards" class="nav-pill">
+          📋 Catálogo de las 8 Fichas Técnicas
+        </a>
+        <a href="#protocolSection" class="nav-pill">
+          ⏱️ Protocolo Pre y Post Entrenamiento
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Barra de Selección de Atleta y Velocidad -->
+    <div class="controls-strip">
+      <div class="control-group">
+        <span>Modelo de atleta:</span>
+        <button class="btn-toggle mob-gender-btn active" data-gender="female" onclick="MobilityEngine.setGender('female')">
+          Mujer 👩
+        </button>
+        <button class="btn-toggle mob-gender-btn" data-gender="male" onclick="MobilityEngine.setGender('male')">
+          Hombre 👨
+        </button>
+      </div>
+
+      <div class="control-group">
+        <span>Velocidad de análisis:</span>
+        <button class="btn-toggle mob-speed-btn" data-speed="0.5" onclick="MobilityEngine.setSpeed(0.5)">0.5x (Lenta)</button>
+        <button class="btn-toggle mob-speed-btn active" data-speed="1.0" onclick="MobilityEngine.setSpeed(1.0)">1.0x (Real)</button>
+        <button class="btn-toggle mob-speed-btn" data-speed="1.5" onclick="MobilityEngine.setSpeed(1.5)">1.5x</button>
+      </div>
+    </div>
+
+    <!-- ESTUDIO BIOMECÁNICO MAESTRO -->
+    <section class="master-studio" id="masterStudioSec">
+      <div class="studio-header">
+        <div>
+          <div class="badge" style="background:rgba(239,68,68,0.15); border-color:rgba(239,68,68,0.4); color:#f87171;">
+            ● REPRODUCTOR BIOMECÁNICO EN VIVO
+          </div>
+          <h2 class="studio-title" id="mob-master-title">1. Dorsiflexión de Tobillo en Carga (Knee-to-Wall)</h2>
+          <p class="studio-sub" id="mob-master-sub">Absorción de impacto en carrera y paso fluido por el punto muerto inferior en pedaleo</p>
+        </div>
+
+        <button onclick="MobilityEngine.recordVideo('mobility-master-canvas', MobilityEngine.activeMasterMob || 1, this)" class="btn-record-clip">
+          📥 Descargar Vídeo (.webm)
+        </button>
+      </div>
+
+      <div class="canvas-wrapper">
+        <canvas id="mobility-master-canvas"></canvas>
+
+        <!-- HUD Telemetría -->
+        <div class="hud-box hud-tl">
+          <span style="color:#9ca3af;">FASE:</span>
+          <strong id="mob-hud-phase" style="color:#f59e0b;">APERTURA ARTICULAR</strong>
+        </div>
+
+        <div class="hud-box hud-tr">
+          <span style="color:#9ca3af;">RANGO (ROM):</span>
+          <strong id="mob-hud-angle" style="color:#38bdf8;">105°</strong>
+        </div>
+
+        <div class="hud-box hud-bl">
+          <span style="color:#9ca3af;">ZONA OBJETIVO:</span>
+          <strong id="mob-hud-target" style="color:#f87171;">Articulación tibioperoneoastragalina</strong>
+        </div>
+      </div>
+
+      <!-- Controles del reproductor -->
+      <div class="player-controls">
+        <div class="scrubber-row">
+          <span id="mob-master-time">0:00 / 0:06</span>
+          <input type="range" id="mob-master-scrubber" min="0" max="1000" value="0" oninput="MobilityEngine.seekMaster(this.value)">
+          <button id="mob-btn-play" onclick="MobilityEngine.toggleMasterPlay()" class="btn-toggle" style="padding:4px 10px;">⏸️</button>
+        </div>
+      </div>
+
+      <!-- Selector Rápido de las 8 Rutinas -->
+      <div class="selector-grid">
+        <button class="mob-selector-btn active" data-id="1" onclick="MobilityEngine.setMasterMobility(1)">
+          <span class="btn-num">1</span> 🦶 Dorsiflexión Tobillo Pared
+        </button>
+        <button class="mob-selector-btn" data-id="2" onclick="MobilityEngine.setMasterMobility(2)">
+          <span class="btn-num">2</span> 🦵 Couch Stretch (Psoas)
+        </button>
+        <button class="mob-selector-btn" data-id="3" onclick="MobilityEngine.setMasterMobility(3)">
+          <span class="btn-num">3</span> 🔄 Rotaciones Cadera 90/90
+        </button>
+        <button class="mob-selector-btn" data-id="4" onclick="MobilityEngine.setMasterMobility(4)">
+          <span class="btn-num">4</span> ⭐ Mayor Estiramiento (WGS)
+        </button>
+        <button class="mob-selector-btn" data-id="5" onclick="MobilityEngine.setMasterMobility(5)">
+          <span class="btn-num">5</span> 🧘 Enhebrar Aguja Torácico
+        </button>
+        <button class="mob-selector-btn" data-id="6" onclick="MobilityEngine.setMasterMobility(6)">
+          <span class="btn-num">6</span> 🏃 Barrido Isquios Dinámico
+        </button>
+        <button class="mob-selector-btn" data-id="7" onclick="MobilityEngine.setMasterMobility(7)">
+          <span class="btn-num">7</span> 🐸 Sentadilla Cossack Aductores
+        </button>
+        <button class="mob-selector-btn" data-id="8" onclick="MobilityEngine.setMasterMobility(8)">
+          <span class="btn-num">8</span> ⚡ Descompresión Cintilla (ITB)
+        </button>
+      </div>
+    </section>
+
+    <!-- Filtros de Categorías -->
+    <div class="filter-tabs" id="galleryCards">
+      <button class="filter-btn active" onclick="filterMob('todos', this)">Todos (8)</button>
+      <button class="filter-btn" onclick="filterMob('corredores', this)">🏃 Especial Corredores</button>
+      <button class="filter-btn" onclick="filterMob('ciclistas', this)">🚴 Especial Ciclistas</button>
+      <button class="filter-btn" onclick="filterMob('cadera', this)">🦵 Cadera & Pelvis</button>
+      <button class="filter-btn" onclick="filterMob('tobillo', this)">🦶 Tobillo & Pie</button>
+      <button class="filter-btn" onclick="filterMob('columna', this)">🧘 Columna & Tórax</button>
+    </div>
+
+    <!-- CUADRÍCULA DE TARJETAS TÉCNICAS (8 EJERCICIOS) -->
+    <div class="cards-grid" id="mobCardsContainer">
+
+      <!-- CARD 01 -->
+      <article class="mob-card" data-cat="tobillo corredores ciclistas">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">#01. Dorsiflexión de Tobillo en Carga (Knee-to-Wall)</h3>
+            <p class="card-target">Articulación tibioperoneoastragalina, sóleo y fascia plantar</p>
+          </div>
+          <span class="card-tag">🏃 Corredores & 🚴 Ciclistas</span>
+        </div>
+        <div class="card-canvas-wrap">
+          <canvas id="mob-canvas-1"></canvas>
+        </div>
+        <div class="card-body">
+          <div class="athlete-focus">
+            <div class="focus-box focus-runner">
+              <strong>🏃 En carrera:</strong> Absorbe el impacto de aterrizaje en mediopié. Previene fascitis plantar, tendinitis aquílea y periostitis tibial.
+            </div>
+            <div class="focus-box focus-cyclist">
+              <strong>🚴 En bicicleta:</strong> Permite pasar por el punto muerto inferior (PMI) sin descolgar el talón ni sobrecargar gemelos.
+            </div>
+          </div>
+          <div class="info-block">
+            <div class="info-block-title">📐 Rango de Movimiento (ROM) y Ejecución</div>
+            <p>Distancia dedo gordo-pared de <strong>10 a 12 cm</strong> manteniendo el talón clavado. 2 series de 10 oscilaciones dinámicas por pierna (2s ida, 2s vuelta).</p>
+          </div>
+          <div class="info-block" style="border-left: 3px solid #ef4444;">
+            <div class="info-block-title">⚠️ Error Común a Evitar</div>
+            <p>Despegar el talón del suelo o colapsar el arco plantar hacia adentro (pronación forzada).</p>
+          </div>
+          <div class="card-actions">
+            <span id="mob-card-rom-1" style="font-family:monospace; color:#38bdf8; font-weight:700;">105° ROM</span>
+            <button onclick="MobilityEngine.recordVideo('mob-canvas-1', 1, this)" class="btn-record-clip">
+              📥 Vídeo (.webm)
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 02 -->
+      <article class="mob-card" data-cat="cadera ciclistas corredores">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">#02. Couch Stretch / Zancada con Retroversión (Psoas-Ilíaco)</h3>
+            <p class="card-target">Psoas mayor, ilíaco, recto femoral y cápsula anterior</p>
+          </div>
+          <span class="card-tag">🚴 Vital Ciclistas & 🏃 Corredores</span>
+        </div>
+        <div class="card-canvas-wrap">
+          <canvas id="mob-canvas-2"></canvas>
+        </div>
+        <div class="card-body">
+          <div class="athlete-focus">
+            <div class="focus-box focus-cyclist">
+              <strong>🚴 En bicicleta:</strong> Contrarresta el acortamiento adaptativo del psoas tras horas acoplado en flexión cerrada sobre el sillín.
+            </div>
+            <div class="focus-box focus-runner">
+              <strong>🏃 En carrera:</strong> Permite la extensión completa de cadera en la propulsión sin hiperextender la zona lumbar (evita lumbalgia).
+            </div>
+          </div>
+          <div class="info-block">
+            <div class="info-block-title">📐 Rango de Movimiento (ROM) y Ejecución</div>
+            <p>Retroversión pélvica activa apretando el glúteo trasero. 2 series de 30-40 segundos respirando hondo por pierna.</p>
+          </div>
+          <div class="info-block" style="border-left: 3px solid #ef4444;">
+            <div class="info-block-title">⚠️ Error Común a Evitar</div>
+            <p>Arquear la espalda lumbar para simular más avance en vez de empujar desde la pelvis.</p>
+          </div>
+          <div class="card-actions">
+            <span id="mob-card-rom-2" style="font-family:monospace; color:#38bdf8; font-weight:700;">20° Extensión</span>
+            <button onclick="MobilityEngine.recordVideo('mob-canvas-2', 2, this)" class="btn-record-clip">
+              📥 Vídeo (.webm)
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 03 -->
+      <article class="mob-card" data-cat="cadera corredores ciclistas">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">#03. Rotaciones de Cadera 90/90 (Shin Box Switches)</h3>
+            <p class="card-target">Cápsula coxofemoral en rotación interna (RI) y externa (RE)</p>
+          </div>
+          <span class="card-tag">🏃 Anti-cintilla & 🚴 Alineación</span>
+        </div>
+        <div class="card-canvas-wrap">
+          <canvas id="mob-canvas-3"></canvas>
+        </div>
+        <div class="card-body">
+          <div class="athlete-focus">
+            <div class="focus-box focus-runner">
+              <strong>🏃 En carrera:</strong> La falta de rotación interna (&lt;35°) es el detonante #1 del síndrome de cintilla iliotibial y dolor trocantéreo.
+            </div>
+            <div class="focus-box focus-cyclist">
+              <strong>🚴 En bicicleta:</strong> Mantiene la rodilla alineada en el plano sagital, impidiendo el "knee flare" (abrir las rodillas al pedalear).
+            </div>
+          </div>
+          <div class="info-block">
+            <div class="info-block-title">📐 Rango de Movimiento (ROM) y Ejecución</div>
+            <p>Transición suave entre ambos lados sin levantar el torso excesivamente ni usar las manos. 10 a 12 repeticiones lentas.</p>
+          </div>
+          <div class="info-block" style="border-left: 3px solid #ef4444;">
+            <div class="info-block-title">⚠️ Error Común a Evitar</div>
+            <p>Forzar la rodilla en torsión; el movimiento debe nacer exclusivamente desde la articulación de la cadera.</p>
+          </div>
+          <div class="card-actions">
+            <span id="mob-card-rom-3" style="font-family:monospace; color:#38bdf8; font-weight:700;">45° ROM</span>
+            <button onclick="MobilityEngine.recordVideo('mob-canvas-3', 3, this)" class="btn-record-clip">
+              📥 Vídeo (.webm)
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 04 -->
+      <article class="mob-card" data-cat="columna cadera corredores ciclistas">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">#04. El Mayor Estiramiento del Mundo (World’s Greatest Stretch)</h3>
+            <p class="card-target">Disociación lumbopélvica, rotación dorsal, cadera y tobillos</p>
+          </div>
+          <span class="card-tag">⭐ Rey del Calentamiento Dinámico</span>
+        </div>
+        <div class="card-canvas-wrap">
+          <canvas id="mob-canvas-4"></canvas>
+        </div>
+        <div class="card-body">
+          <div class="athlete-focus">
+            <div class="focus-box focus-runner">
+              <strong>🏃 En carrera:</strong> Emula la zancada máxima disociando hombros y pelvis, liberando el braceo cruzado natural.
+            </div>
+            <div class="focus-box focus-cyclist">
+              <strong>🚴 En bicicleta:</strong> Descomprime la flexión estática del tórax sobre el manillar mientras abre la cadera contralateral.
+            </div>
+          </div>
+          <div class="info-block">
+            <div class="info-block-title">📐 Rango de Movimiento (ROM) y Ejecución</div>
+            <p>Bajar el codo al empeine (3s) y abrir el brazo vertical al techo (3s) siguiendo la mano con la mirada. 6 reps por lado.</p>
+          </div>
+          <div class="info-block" style="border-left: 3px solid #ef4444;">
+            <div class="info-block-title">⚠️ Error Común a Evitar</div>
+            <p>Dejar caer la rodilla trasera al suelo; la pierna posterior debe mantenerse extendida y activa.</p>
+          </div>
+          <div class="card-actions">
+            <span id="mob-card-rom-4" style="font-family:monospace; color:#38bdf8; font-weight:700;">75° Rotación</span>
+            <button onclick="MobilityEngine.recordVideo('mob-canvas-4', 4, this)" class="btn-record-clip">
+              📥 Vídeo (.webm)
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 05 -->
+      <article class="mob-card" data-cat="columna ciclistas corredores">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">#05. Enhebrar la Aguja Torácico en Cuadrupedia</h3>
+            <p class="card-target">Vértebras dorsales T1 a T12, caja torácica y romboides</p>
+          </div>
+          <span class="card-tag">🚴 Alivio manillar & 🏃 Braceo fluido</span>
+        </div>
+        <div class="card-canvas-wrap">
+          <canvas id="mob-canvas-5"></canvas>
+        </div>
+        <div class="card-body">
+          <div class="athlete-focus">
+            <div class="focus-box focus-cyclist">
+              <strong>🚴 En bicicleta:</strong> Elimina la contractura interescapular y cervical derivada de soportar el peso sobre el manillar.
+            </div>
+            <div class="focus-box focus-runner">
+              <strong>🏃 En carrera:</strong> Permite que la caja torácica se expanda al máximo facilitando la ventilación diafragmática profunda.
+            </div>
+          </div>
+          <div class="info-block">
+            <div class="info-block-title">📐 Rango de Movimiento (ROM) y Ejecución</div>
+            <p>Rotar el brazo por debajo del pecho y abrirlo verticalmente arriba manteniendo la pelvis fija. 8 repeticiones lentas por lado.</p>
+          </div>
+          <div class="info-block" style="border-left: 3px solid #ef4444;">
+            <div class="info-block-title">⚠️ Error Común a Evitar</div>
+            <p>Girar la pelvis hacia los lados; el giro debe ser exclusivamente de la zona media y alta de la espalda.</p>
+          </div>
+          <div class="card-actions">
+            <span id="mob-card-rom-5" style="font-family:monospace; color:#38bdf8; font-weight:700;">70° Dorsal</span>
+            <button onclick="MobilityEngine.recordVideo('mob-canvas-5', 5, this)" class="btn-record-clip">
+              📥 Vídeo (.webm)
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 06 -->
+      <article class="mob-card" data-cat="piernas corredores ciclistas">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">#06. Barrido Isquiosural Dinámico (Hamstring Sweeps)</h3>
+            <p class="card-target">Vientre isquiotibial, fascia lumbosacra y nervio ciático</p>
+          </div>
+          <span class="card-tag">🏃 Prevención roturas & 🚴 Isquion</span>
+        </div>
+        <div class="card-canvas-wrap">
+          <canvas id="mob-canvas-6"></canvas>
+        </div>
+        <div class="card-body">
+          <div class="athlete-focus">
+            <div class="focus-box focus-runner">
+              <strong>🏃 En carrera:</strong> Calienta los isquios en régimen dinámico de estiramiento-acortamiento, previniendo tirones al sprintar.
+            </div>
+            <div class="focus-box focus-cyclist">
+              <strong>🚴 En bicicleta:</strong> Descomprime el origen de los isquiotibiales en los isquiones que sufre fricción continua en el sillín.
+            </div>
+          </div>
+          <div class="info-block">
+            <div class="info-block-title">📐 Rango de Movimiento (ROM) y Ejecución</div>
+            <p>Paso adelante con talón apoyado y dedos al cielo; bisagra de cadera barriendo con las manos hacia adelante. 10 pasos alternados.</p>
+          </div>
+          <div class="info-block" style="border-left: 3px solid #ef4444;">
+            <div class="info-block-title">⚠️ Error Común a Evitar</div>
+            <p>Flexionar la columna jorobando la espalda en vez de realizar una bisagra pura de cadera.</p>
+          </div>
+          <div class="card-actions">
+            <span id="mob-card-rom-6" style="font-family:monospace; color:#38bdf8; font-weight:700;">85° Bisagra</span>
+            <button onclick="MobilityEngine.recordVideo('mob-canvas-6', 6, this)" class="btn-record-clip">
+              📥 Vídeo (.webm)
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 07 -->
+      <article class="mob-card" data-cat="cadera ciclistas corredores">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">#07. Sentadilla Cossack Dinámica (Aductores y Cadera Frontal)</h3>
+            <p class="card-target">Aductor mayor, largo y grácil; ligamentos colaterales de rodilla</p>
+          </div>
+          <span class="card-tag">🏃 Anti-pubalgia & 🚴 Plano frontal</span>
+        </div>
+        <div class="card-canvas-wrap">
+          <canvas id="mob-canvas-7"></canvas>
+        </div>
+        <div class="card-body">
+          <div class="athlete-focus">
+            <div class="focus-box focus-runner">
+              <strong>🏃 En carrera:</strong> Estabiliza la pelvis en apoyo monopodal y previene la osteopatía dinámica de pubis (pubalgia).
+            </div>
+            <div class="focus-box focus-cyclist">
+              <strong>🚴 En bicicleta:</strong> Rompe la rigidez sagital continua del pedaleo abriendo la cadera y lubricando meniscos y cartílagos.
+            </div>
+          </div>
+          <div class="info-block">
+            <div class="info-block-title">📐 Rango de Movimiento (ROM) y Ejecución</div>
+            <p>Descender hacia un lado flexionando rodilla y cadera; la pierna estirada apoya el talón con dedos arriba. 6 a 8 reps por lado.</p>
+          </div>
+          <div class="info-block" style="border-left: 3px solid #ef4444;">
+            <div class="info-block-title">⚠️ Error Común a Evitar</div>
+            <p>Despegar el talón del lado que desciende; si no llegas abajo, reduce la profundidad hasta ganar movilidad.</p>
+          </div>
+          <div class="card-actions">
+            <span id="mob-card-rom-7" style="font-family:monospace; color:#38bdf8; font-weight:700;">90° Flexión</span>
+            <button onclick="MobilityEngine.recordVideo('mob-canvas-7', 7, this)" class="btn-record-clip">
+              📥 Vídeo (.webm)
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 08 -->
+      <article class="mob-card" data-cat="cadera corredores ciclistas">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">#08. Cruce Posterior y Descompresión del Tracto Iliotibial</h3>
+            <p class="card-target">Banda iliotibial (tracto de Maissiat), TFL y glúteo medio</p>
+          </div>
+          <span class="card-tag">🏃 Anti-limpiaparabrisas & 🚴 Trocánter</span>
+        </div>
+        <div class="card-canvas-wrap">
+          <canvas id="mob-canvas-8"></canvas>
+        </div>
+        <div class="card-body">
+          <div class="athlete-focus">
+            <div class="focus-box focus-runner">
+              <strong>🏃 En carrera:</strong> Prevención cardinal del roce del tendón iliotibial sobre el cóndilo externo de rodilla en tiradas largas o cuestas.
+            </div>
+            <div class="focus-box focus-cyclist">
+              <strong>🚴 En bicicleta:</strong> Alivia la tensión en la cresta ilíaca provocada por la cadencia alta en bielas con factor Q estrecho.
+            </div>
+          </div>
+          <div class="info-block">
+            <div class="info-block-title">📐 Rango de Movimiento (ROM) y Ejecución</div>
+            <p>Cruzar pierna por detrás apoyando canto externo del pie, empujar la cadera hacia afuera y elevar el brazo en arco. 30s por lado.</p>
+          </div>
+          <div class="info-block" style="border-left: 3px solid #ef4444;">
+            <div class="info-block-title">⚠️ Error Común a Evitar</div>
+            <p>Girar el pecho hacia el suelo; el tórax debe permanecer apuntando de frente en todo momento.</p>
+          </div>
+          <div class="card-actions">
+            <span id="mob-card-rom-8" style="font-family:monospace; color:#38bdf8; font-weight:700;">25° Aducción</span>
+            <button onclick="MobilityEngine.recordVideo('mob-canvas-8', 8, this)" class="btn-record-clip">
+              📥 Vídeo (.webm)
+            </button>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- PROTOCOLO CLÍNICO Y DEPORTIVO -->
+    <section class="protocol-section" id="protocolSection">
+      <div class="badge" style="background:rgba(16,185,129,0.15); border-color:rgba(16,185,129,0.4); color:#34d399;">
+        ⏱️ PERIODIZACIÓN EN EL ENTRENAMIENTO
+      </div>
+      <h2 style="font-size:20px; font-weight:800; color:#fff; margin: 8px 0 4px;">
+        Cómo integrar la movilidad articular en tu rutina de Running y Ciclismo
+      </h2>
+      <p style="color:var(--text-muted); font-size:13px;">
+        Diferenciación crucial entre movilidad dinámica activa (antes de entrenar) y descompresión capsulofascial sostenida (después de entrenar).
+      </p>
+
+      <div class="protocol-grid">
+        <div class="protocol-card">
+          <h3>⚡ Calentamiento Dinámico Pre-Sesión (8-10 min)</h3>
+          <p style="color:#d1d5db; margin-bottom:8px;">
+            <strong>Objetivo:</strong> Elevar temperatura intraarticular, secretar líquido sinovial y activar receptores propioceptivos sin perder potencia muscular.
+          </p>
+          <ul style="padding-left:18px; color:var(--text-muted); space-y:4px;">
+            <li>#01 Knee-to-Wall Tobillo: 10 oscilaciones/pierna.</li>
+            <li>#04 World's Greatest Stretch: 5 reps completas por lado.</li>
+            <li>#06 Hamstring Sweeps dinámicos: 10 pasos alternados.</li>
+            <li>#07 Cossack Squats: 6 reps por lado con ritmo controlado.</li>
+          </ul>
+        </div>
+
+        <div class="protocol-card">
+          <h3>🧘 Descompresión Post-Sesión o Días de Recuperación (12-15 min)</h3>
+          <p style="color:#d1d5db; margin-bottom:8px;">
+            <strong>Objetivo:</strong> Revertir el acortamiento adaptativo del sillín o los impactos de la carrera, restaurar el rango articular pasivo y normalizar el tono fascial.
+          </p>
+          <ul style="padding-left:18px; color:var(--text-muted); space-y:4px;">
+            <li>#02 Couch Stretch (Psoas): 2 × 40 segundos respirando hondo.</li>
+            <li>#03 Rotaciones de Cadera 90/90: 10 cambios lentos.</li>
+            <li>#05 Enhebrar la aguja torácica: 8 respiraciones profundas por lado.</li>
+            <li>#08 Descompresión de cintilla iliotibial (ITB): 2 × 30 segundos.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Script del Motor de Movilidad -->
+  <script src="mobility_engine.js"></script>
+
+  <!-- Script de Filtrado de Tarjetas -->
+  <script>
+    function filterMob(cat, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      const cards = document.querySelectorAll('.mob-card');
+      cards.forEach(card => {
+        const itemCats = card.getAttribute('data-cat') || '';
+        if (cat === 'todos' || itemCats.includes(cat)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

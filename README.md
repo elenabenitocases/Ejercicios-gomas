@@ -118,11 +118,30 @@ Para garantizar la máxima seguridad y claridad motriz en el trabajo del cuádri
 
 ---
 
+## 🏃🚴 Parte 3: Movilidad articular para corredores y ciclistas (8 rutinas dinámicas)
+
+Suite técnica y cinemática especializada para deportes de resistencia con modelado 2D a 60 fps, telemetría articular (ROM óptimo), visualización de cápsulas y fascias en elongación, y exportador WebM:
+
+1. **#01. Dorsiflexión de tobillo en pared (knee-to-wall)** — *Articulación tibioperoneoastragalina, sóleo y fascia plantar*
+2. **#02. Couch stretch / Zancada baja con retroversión** — *Psoas mayor, ilíaco y recto femoral anterior*
+3. **#03. Rotaciones de cadera 90/90 (shin box switches)** — *Cápsula coxofemoral en rotación interna y externa*
+4. **#04. El mayor estiramiento del mundo (World’s Greatest Stretch)** — *Cadera, columna torácica, isquiotibiales y tobillos*
+5. **#05. Enhebrar la aguja torácico en cuadrupedia** — *Vértebras dorsales T1-T12, caja torácica y romboides*
+6. **#06. Barrido isquiosural dinámico (hamstring sweeps)** — *Isquiotibiales, fascia lumbosacra y nervio ciático*
+7. **#07. Sentadilla Cossack dinámica** — *Aductor mayor, largo y grácil; ligamentos colaterales*
+8. **#08. Cruce posterior y descompresión de cintilla (ITB glide)** — *Tracto iliotibial (Maissiat), TFL y glúteo medio*
+
+### Doble acceso en el repositorio:
+- **Integrado en el Atlas**: Pestaña maestra `🏃🚴 Movilidad corredores y ciclistas (8)` en `index.html`.
+- **Suite independiente exclusiva**: Archivo `movilidad_corredores_ciclistas.html` (lanzable mediante `Abrir_Movilidad.bat`).
+
+---
+
 ## 💻 Ejecución local y lanzamiento
 
 Para abrir la suite en local sin necesidad de servidor:
-1. Haz doble clic en el archivo `Abrir_Videos.bat`.
-2. O bien abre directamente `index.html` en cualquier navegador web moderno (Chrome, Edge, Firefox, Safari).
+1. **Atlas Completo**: Haz doble clic en `Abrir_Videos.bat` o abre `index.html`.
+2. **Suite de Movilidad para Corredores y Ciclistas**: Haz doble clic en `Abrir_Movilidad.bat` o abre `movilidad_corredores_ciclistas.html`.
 
 ---
 **Autora**: Elena Benito Cases  
