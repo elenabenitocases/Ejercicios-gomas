@@ -37,8 +37,16 @@ Esta suite interactiva ofrece una experiencia dual completa en cada ejercicio:
 - Sentadilla Cossack (Aductores en plano frontal anti-pubalgia).
 - Descompresión ITB (Prevención del síndrome del limpiaparabrisas).
 
+6. NOVEDAD: ESTUDIO DE VÍDEO CON PERSONAS REALISTAS Y TELEMETRÍA (HD 60 FPS)
+- Modelos humanos fotorrealistas de atletas en estudio y clínica deportiva.
+- Goniómetro dinámico en vivo con medición angular en grados.
+- Flechas de movimiento vectoriales y mapas térmicos de grupos musculares activos.
+- Guías paso a paso para principiantes: errores típicos, trucos mentales y adaptación para casa y gimnasio.
+- Grabación directa y descarga de clips de vídeo .webm en alta definición.
+
 CÓMO ABRIR:
 - Atlas General (24 ejercicios + 11 módulos + movilidad): Doble clic en "Abrir_Videos.bat"
-- Suite Exclusiva de Movilidad para Corredores y Ciclistas: Doble clic en "Abrir_Movilidad.bat"
-- Funciona 100% offline sin necesidad de conexión ni instalaciones previas.
+- Suite Exclusiva de Movilidad: Doble clic en "Abrir_Movilidad.bat"
+- Estudio de Movilidad con Personas Realistas: Doble clic en "Abrir_Movilidad_Realista.bat"
+- Funciona 100% offline y en GitHub Pages: https://elenabenitocases.github.io/Ejercicios-gomas/
 ========================================================================

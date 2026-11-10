@@ -132,8 +132,9 @@ Suite técnica y cinemática especializada para deportes de resistencia con mode
 8. **#08. Cruce posterior y descompresión de cintilla (ITB glide)** — *Tracto iliotibial (Maissiat), TFL y glúteo medio*
 
 ### Doble acceso en el repositorio:
-- **Integrado en el Atlas**: Pestaña maestra `🏃🚴 Movilidad corredores y ciclistas (8)` en `index.html`.
-- **Suite independiente exclusiva**: Archivo `movilidad_corredores_ciclistas.html` (lanzable mediante `Abrir_Movilidad.bat`).
+- **Integrado en el Atlas**: Pestaña maestra `🏃🚴 Movilidad corredores y ciclistas (8)` en `index.html` con selector de vista (Persona Real HD / Cinemática 60 fps / Ambos).
+- **Estudio de Vídeo con Personas Realistas**: Archivo `visor_movilidad_realista.html` (lanzable mediante `Abrir_Movilidad_Realista.bat`).
+- **Suite independiente de Movilidad**: Archivo `movilidad_corredores_ciclistas.html` (lanzable mediante `Abrir_Movilidad.bat`).
 
 ---
 
@@ -141,7 +142,8 @@ Suite técnica y cinemática especializada para deportes de resistencia con mode
 
 Para abrir la suite en local sin necesidad de servidor:
 1. **Atlas Completo**: Haz doble clic en `Abrir_Videos.bat` o abre `index.html`.
-2. **Suite de Movilidad para Corredores y Ciclistas**: Haz doble clic en `Abrir_Movilidad.bat` o abre `movilidad_corredores_ciclistas.html`.
+2. **Estudio con Personas Realistas (Vídeo HD 60 fps)**: Haz doble clic en `Abrir_Movilidad_Realista.bat` o abre `visor_movilidad_realista.html`.
+3. **Suite de Movilidad para Corredores y Ciclistas**: Haz doble clic en `Abrir_Movilidad.bat` o abre `movilidad_corredores_ciclistas.html`.
 
 ---
 **Autora**: Elena Benito Cases  

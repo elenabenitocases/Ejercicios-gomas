@@ -1333,6 +1333,28 @@
 
     getMobilities: function () {
       return MOBILITIES;
+    },
+
+    switchCardView: function (mobId, mode) {
+      const realWrap = document.getElementById(`mob-real-wrap-${mobId}`);
+      const animWrap = document.getElementById(`mob-anim-wrap-${mobId}`);
+      const tabs = document.querySelectorAll(`#mob-media-tabs-${mobId} .media-tab-btn`);
+
+      tabs.forEach(t => {
+        if (t.getAttribute('data-mode') === mode) t.classList.add('active');
+        else t.classList.remove('active');
+      });
+
+      if (mode === 'real') {
+        if (realWrap) realWrap.style.display = 'block';
+        if (animWrap) animWrap.style.display = 'none';
+      } else if (mode === 'anim') {
+        if (realWrap) realWrap.style.display = 'none';
+        if (animWrap) animWrap.style.display = 'block';
+      } else if (mode === 'both') {
+        if (realWrap) realWrap.style.display = 'block';
+        if (animWrap) animWrap.style.display = 'block';
+      }
     }
   };
 
